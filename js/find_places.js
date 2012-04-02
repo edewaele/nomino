@@ -1,0 +1,116 @@
+
+/**
+ * Function used to search for a named place
+ * @param adress optional parameter, an adress search for, if it is undefined, the value of #query is used instead
+ */
+function search_for_places(address)
+{
+	// the "address" string is inserted into the text field, as if the user had actually typed it
+	if(typeof(address) != 'undefined')
+	{
+		$("#query").val(address);
+	}
+	$.ajax({
+		dataType:'text',
+		url: "api/find.php",
+		data:{'q':$("#query").val()},
+		success: function(e){
+			var reader = new OpenLayers.Format.KML({extractStyles : true});
+			var places = reader.read(e);
+			$("#list_find_places ul").html("");
+			layer_find_places.removeAllFeatures();
+			var markers = [];
+			for(var numPlace = 0; numPlace < places.length; numPlace++)
+			{
+				// most place images are taken from Nominatim results
+				var imageURL =  places[numPlace].attributes.icon?places[numPlace].attributes.icon:"img/marker.png";
+				// list item
+				$("#list_find_places ul").append("<li onmouseover=\"$(this).addClass('place_highlight');map_find_places.setCenter(LonLatToM(new OpenLayers.LonLat("+places[numPlace].geometry.x+","+places[numPlace].geometry.y+")))\" onmouseout=\"$(this).removeClass('place_highlight');\"><img src=\""+imageURL+"\"><a href=\"javascript:beginEdit('"+places[numPlace].attributes.osm_type+"',"+places[numPlace].attributes.osm_id+")\">"+places[numPlace].attributes.name+"</a> <span class=\"placeDetails\">("+places[numPlace].attributes.class+","+places[numPlace].attributes.type+")</span></li>");
+				// feature on the map
+				var style = OpenLayers.Util.extend({}, iconPlace);
+				style.externalGraphic = imageURL;
+				var marker = new OpenLayers.Feature.Vector(LonLatToPoint(LonLatToM(new OpenLayers.LonLat(places[numPlace].geometry.x,places[numPlace].geometry.y))), null,style);
+				marker.attributes = {
+					"name" : places[numPlace].attributes.name,
+					"numPlace":numPlace
+				};
+				markers.push(marker)
+			}
+			
+			markers.reverse();
+			layer_find_places.addFeatures(markers);
+			map_find_places.zoomToExtent(layer_find_places.getDataExtent());
+		},
+		error: function(){alert('Error while loading places');}
+    });
+}
+
+/**
+ * Search for an OSM object, given its type and id
+ */
+function search_for_osm_object()
+{
+	beginEdit($("#search_osm_type").val(),$("#search_osm_id").val());	
+}
+
+/**
+ * 
+ * @param lon
+ * @param lat
+ */
+function search_for_position(lon,lat)
+{
+	$.ajax({
+		dataType:'xml',
+		url: "api/find.php",
+		data:{
+			'lon':lon,
+			'lat':lat
+		},
+		success: function(e){
+			var admin_levels = ["country","state","state_district","county","city","city_district","subsurb","road"];
+			var adressLines = [];
+			var previousQuery = "";
+					
+			for(var level in admin_levels)
+			{
+				if($(e).find(admin_levels[level]).length > 0)
+				{
+					var value = $(e).find(admin_levels[level]).text();
+					previousQuery = value + (previousQuery!=""?(", "+previousQuery):""); 
+					adressLines.push({
+						type:admin_levels[level],
+						name:value,
+						query:previousQuery
+					});
+				}
+			}
+			
+			var formHTML = "";
+			$.each(adressLines,function(index,value){
+				formHTML += '<input type="radio" name="place" id="selectPlace'+index+'" value="'+value.query+'"><label for="selectPlace'+index+'"><span class="placeDetails" style="width:100px">'+value.type+'</span> '+value.name+'</label><br>';
+			});
+			
+			$("#selectPlaceDialog form").html(formHTML);
+			
+			$( "#selectPlaceDialog" ).dialog({
+				modal: true,
+				resizable:false,
+				autoOpen:true,
+				title:"Select a place",
+				buttons:{
+					"Choose":function(){
+						search_for_places($("#selectPlaceDialog input[name=place]:checked").val());
+						$(this).dialog('close');
+					},
+					"Cancel":function(){
+						$(this).dialog('close');
+					}
+				}
+			});
+			
+			$( "#waitDialog" ).dialog('close');
+		},
+		error: function(){alert('Error while loading places');}
+    });
+}

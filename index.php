@@ -13,6 +13,14 @@
 <script src="js/find_places.js"></script>
 <script src="js/edit.js"></script>
 <script src="js/changeset.js"></script>
+
+<?php if(isset($_GET["osm_type"]) && isset($_GET["osm_id"])){?>
+<script>
+$(function(){
+	beginEdit('<?php echo $_GET["osm_type"]?>','<?php echo $_GET["osm_id"]?>');
+});
+</script>
+<?php }?>
 </head>
 <body>
 
@@ -70,8 +78,8 @@
 		</div>
 		<div id="tabs-3">
 			<h3>Changes 
-			<input type="submit" value="Submit changes" id="button_submit_changes" class="changesetButton" disabled="disabled">
-			<input type="submit" value="Download changeset" id="button_download_changes" class="changesetButton" disabled="disabled">
+			<input type="submit" value="Submit changes" id="button_submit_changes" class="changesetButton" disabled="disabled" onclick="submitChanges()">
+<!-- 			<input type="submit" value="Download changeset" id="button_download_changes" class="changesetButton" disabled="disabled"> -->
 			</h3>
 			<div id="table_changes">
 			<ul></ul>

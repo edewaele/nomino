@@ -10,6 +10,9 @@ spl_autoload_register(array('OSM_Api', 'autoload'));
 /**
  * Class OSM_Api
  * 
+ * Changes:
+ * 2012-03-29
+ * 	- One url for reading, another one for writing ($this->_url & $this->_url4Write)
  * Doc:
  * - http://wiki.openstreetmap.org/wiki/Api
  * - http://wiki.openstreetmap.org/wiki/OsmChange
@@ -17,27 +20,28 @@ spl_autoload_register(array('OSM_Api', 'autoload'));
  * @author cyrille
  */
 class OSM_Api {
-
 	const VERSION = '0.1';
-	const USER_AGENT = 'OSMPhpLib';
+	const USER_AGENT = 'Yapafo';
 
-	const OSMAPI_URL_DEV = 'http://api06.dev.openstreetmap.org/api/0.6';
+	const URL_DEV_UK = 'http://api06.dev.openstreetmap.org/api/0.6';
 	//deprecated: const OSMAPI_URL_PROD_PROXY_LETTUFE = 'http://beta.letuffe.org/api/0.6';
-	const OSMAPI_URL_PROD_FR = 'http://api.openstreetmap.fr/api/0.6';
-	const OSMAPI_URL_PROD = 'http://api.openstreetmap.org/api/0.6';
+	const URL_PROD_FR = 'http://api.openstreetmap.fr/api/0.6';
+	const URL_PROD_UK = 'http://api.openstreetmap.org/api/0.6';
 
 	const OBJTYPE_NODE = 'node';
 	const OBJTYPE_WAY = 'way';
 	const OBJTYPE_RELATION = 'relation';
 
 	protected $_url;
+	protected $_url4Write;
 	protected $_options = array(
-		'url' => self::OSMAPI_URL_PROD,
+		'url' => null,
+		'url4Write' => null,
 		'simulation' => true,
 		'user' => null,
 		'password' => null,
 		'outputFolder' => null,
-		'appName' => 'Unknown application', // name for the application using the API
+		'appName' => '', // name for the application using the API
 		'log' => array('level' => OSM_ZLog::LEVEL_ERROR)
 	);
 	protected $_relations = array();
@@ -51,36 +55,31 @@ class OSM_Api {
 	 */
 	public function __construct(array $options=array()) {
 
-		$this->setOptions($options);
+		// Check that all options exist then override defaults
+		foreach ($options as $k => $v)
+		{
+			if (!array_key_exists($k, $this->_options))
+				throw new OSM_Exception('Unknow Api option "' . $k . '"');
+			$this->_options[$k] = $v;
+		}
 		// Set the Logger
 		OSM_ZLog::configure($this->_options['log']);
 
 		OSM_ZLog::debug(__METHOD__, 'options: ', print_r($this->_options, true));
 
-		// Set the Server url (DEV or PROD
-		$this->_url = $this->_options['url'];
+		// Set the Servers url
 
-		OSM_ZLog::debug(__METHOD__, 'url: ' . $this->_url);
-	}
-
-	public function isDevServer() {
-		return $this->_options['devServer'];
-	}
-	
-	/**
-	 * Modifiy current options based on 
-	 * @param array $options
-	 * @throws OSM_Exception raised if an option key is unknown
-	 */
-	public function setOptions(array $options=array())
-	{
-		// Check that all options exist then override defaults
-		foreach ($options as $k => $v)
+		if (empty($this->_options['url']))
 		{
-			if (!array_key_exists($k, $this->_options))
-				throw new OSM_Exception('Unknown Api option "' . $k . '"');
-			$this->_options[$k] = $v;
+			throw new OSM_Exception('Url must be set');
 		}
+
+		if (empty($this->_options['url4Write']))
+		{
+			$this->_options['url4Write'] = $this->_options['url'];
+		}
+
+		OSM_ZLog::debug(__METHOD__, 'url: ' . $this->_options['url'] . ', url4Write: ' . $this->_options['url4Write']);
 	}
 
 	/**
@@ -98,6 +97,28 @@ class OSM_Api {
 			return include_once $file;
 		}
 		return false;
+	}
+
+	/**
+	 * @param string $key
+	 * @return mixed
+	 */
+	public function getOption($key) {
+		if (!array_key_exists($key, $this->_options))
+			return null;
+		return $this->_options[$key];
+	}
+
+	/**
+	 * @param string $key
+	 * @param mixed $value
+	 * @return OSM_Api fluent interface
+	 */
+	public function setOption($key, $value) {
+		if (!array_key_exists($key, $this->_options))
+			throw new OSM_Exception('Unknow Api option "' . $key . '"');
+		$this->_options[$key] = $key;
+		return $this;
 	}
 
 	public function getLastLoadedXml() {
@@ -118,7 +139,21 @@ class OSM_Api {
 
 	protected function _http($relativeUrl, $data=null, $method='GET') {
 
-		$url = $this->_url . '/' . $relativeUrl;
+		$url = null;
+		switch ($method)
+		{
+			case 'GET':
+				$url = $this->_options['url'];
+				break;
+			case 'PUT':
+			case 'POST':
+				$url = $this->_options['url4Write'];
+				break;
+			default:
+				throw new OSM_Exception('Unknow howto handle http method "' . $method . '"');
+		}
+		$url .= '/' . $relativeUrl;
+
 		OSM_ZLog::notice(__METHOD__, $method . ' url: ', $url);
 
 		$auth = base64_encode($this->_options['user'] . ':' . $this->_options['password']);
@@ -128,15 +163,12 @@ class OSM_Api {
 			'Content-type: application/x-www-form-urlencoded'
 		);
 
-		$userAgent = "";
-		if($this->_options['appName'])$userAgent .= $this->_options['appName'] . ' / ';
-		$userAgent .= self::USER_AGENT . ' ' . self::VERSION;
 		if ($data == null)
 		{
 			$opts = array('http' =>
 				array(
 					'method' => $method,
-					'user_agent' => $userAgent,
+					'user_agent' => $this->getUserAgent(),
 					'header' => /* implode("\r\n", $headers) */$headers,
 				)
 			);
@@ -149,7 +181,7 @@ class OSM_Api {
 			$opts = array('http' =>
 				array(
 					'method' => $method,
-					'user_agent' => $userAgent,
+					'user_agent' => $this->getUserAgent(),
 					//'header' => 'Content-type: application/x-www-form-urlencoded',
 					'header' => /* implode("\r\n", $headers) */$headers,
 					'content' => $postdata
@@ -301,6 +333,69 @@ class OSM_Api {
 	}
 
 	/**
+	 * Returns all loaded objects.
+	 * @return array List of objects
+	 */
+	public function getObjects() {
+		$result = array();
+		foreach ($this->_nodes as $node)
+		{
+			$result[] = $node;
+		}
+		foreach ($this->_ways as $way)
+		{
+			$result[] = $way;
+		}
+		foreach ($this->_relations as $relation)
+		{
+			$result[] = $relation;
+		}
+		return $result;
+	}
+
+	/**
+	 * Removes an object loaded by the API.
+	 * No exception is raised if the object is unknown.
+	 * @param string $type
+	 * @param int $id
+	 */
+	public function removeObject($type, $id) {
+		switch ($type)
+		{
+			case self::OBJTYPE_RELATION:
+				if (array_key_exists($id, $this->_relations))
+					unset($this->_relations[$id]);
+				break;
+
+			case self::OBJTYPE_WAY:
+				if (array_key_exists($id, $this->_ways))
+					unset($this->_ways[$id]);
+				break;
+
+			case self::OBJTYPE_NODE:
+				if (array_key_exists($id, $this->_nodes))
+					unset($this->_nodes[$id]);
+				break;
+
+			default:
+				throw new OSM_Exception('Unknow object type "' . $type . '"');
+				break;
+		}
+	}
+
+	/**
+	 * Reverts all changes in a given OSM Object.
+	 * The implementation is not really effective, as the object is downloaded again.
+	 * @param string $type
+	 * @param int $id
+	 * @return OSM_Objects_Object the reverted object
+	 */
+	public function revertObject($type, $id) {
+		$this->removeObject($type, $id);
+		return $this->getObject($type, $id);
+	}
+
+	/**
 	 *
 	 * @param string $id
 	 * @return OSM_Objects_Node 
@@ -398,7 +493,7 @@ class OSM_Api {
 		}
 		else
 		{
-			$result = $this->httpPut($relativeUrl, OSM_Objects_ChangeSet::getCreateXmlStr($comment));
+			$result = $this->httpPut($relativeUrl, OSM_Objects_ChangeSet::getCreateXmlStr($comment,$this->getUserAgent()));
 		}
 
 		OSM_ZLog::debug(__METHOD__, var_export($result, true));
@@ -406,7 +501,7 @@ class OSM_Api {
 		$changeSet = new OSM_Objects_ChangeSet($result);
 		return $changeSet;
 	}
-
+	
 	protected function _closeChangeSet($changeSet) {
 
 		$relativeUrl = 'changeset/' . $changeSet->getId() . '/close';
@@ -425,7 +520,7 @@ class OSM_Api {
 
 		$relativeUrl = 'changeset/' . $changeSet->getId() . '/upload';
 
-		$xmlStr = $changeSet->getUploadXmlStr();
+		$xmlStr = $changeSet->getUploadXmlStr($this->getUserAgent());
 
 		if (OSM_ZLog::isDebug())
 			file_put_contents('debug.OSM_Api._uploadChangeSet.postdata.xml', $xmlStr);
@@ -646,68 +741,18 @@ class OSM_Api {
 	}
 	
 	/**
-	 * Returns all loaded objects
-	 * @return array list of objects
+	 * Return a string like "MyApp / Yapafo 0.1", based on the "appName" options and the library constants.
+	 * This appears as the editor's name in the changeset properties (key "crated_by") 
+	 * @return string user agent string
 	 */
-	public function getObjects()
+	protected function getUserAgent()
 	{
-		$result = array();
-		foreach($this->_nodes as $node)
+		$userAgent = "";
+		if($this->_options['appName'] != "")
 		{
-			$result[] = $node;
+			$userAgent .= $this->_options['appName'] . ' / ';
 		}
-		foreach($this->_ways as $way)
-		{
-			$result[] = $way;
-		}
-		foreach($this->_relations as $relation)
-		{
-			$result[] = $relation;
-		}
-		return $result;
-	}
-	
-	/**
-	 * Removes an object loaded by the API
-	 * No exception is raised if the object is unknown
-	 * @param string $type
-	 * @param int $id
-	 */
-	public function removeObject($type,$id)
-	{
-		switch ($type)
-		{
-			case self::OBJTYPE_RELATION:
-				if (array_key_exists($id, $this->_relations))
-					unset($this->_relations[$id]);
-				break;
-
-			case self::OBJTYPE_WAY:
-				if (array_key_exists($id, $this->_ways))
-					unset($this->_ways[$id]);
-				break;
-
-			case self::OBJTYPE_NODE:
-				if (array_key_exists($id, $this->_nodes))
-					unset($this->_nodes[$id]);
-				break;
-
-			default:
-				throw new OSM_Exception('Unknow object type "' . $type . '"');
-				break;
-		}
-	}
-	
-	/**
-	 * Reverts all changes in a given OSM Object.
-	 * The implementation is not really effective, as the object is downloaded again.
-	 * @param string $type
-	 * @param int $id
-	 * @return OSM_Objects_Object the reverted object
-	 */
-	public function revertObject($type,$id)
-	{
-		$this->removeObject($type,$id);
-		return $this->getObject($type,$id);
+		$userAgent .= self::USER_AGENT . ' ' . self::VERSION;
+		return $userAgent;
 	}
 }

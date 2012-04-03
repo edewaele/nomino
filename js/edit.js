@@ -33,7 +33,15 @@ function saveObject()
 		url: "api/osm_iface.php",
 		data:reqParams,
 		success: function(e){
-			$("#tabs").tabs("enable",2);
+			if(e  == 1)
+			{
+				$("#tabs").tabs("enable",2);
+				$("#tabs").tabs("select",2);
+			}
+			else
+			{
+				alert("Error while saving object");
+			}
 			$( "#waitDialog" ).dialog('close');
 		},
 		error: function(e){alert('Error while sending object data');}
@@ -58,6 +66,11 @@ function beginEdit(type,id)
 			'id':id
 		},
 		success: function(e){
+			if($(e).find('tag').length == 0){
+				$( "#waitDialog" ).dialog('close');
+				alert("Invalid object");
+				return;
+			}
 			editedObject.type = type;
 			editedObject.id = id;
 			objectNames = {};

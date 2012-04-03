@@ -47,3 +47,22 @@ function revertChange(type,id)
 		error: function(e){alert('Error while retrieving OSM object');}
     });
 }
+
+function submitChanges()
+{
+	alert("Not implemented yet");
+	return;
+	$( "#waitDialog" ).dialog('open');
+	$.ajax({
+		dataType:'text',
+		url: "api/osm_iface.php",
+		data:{
+			'action':'save'
+		},
+		success: function(e){
+			$( "#waitDialog" ).dialog('close');
+			alert("Changes saved");
+		},
+		error: function(e){alert('Error while retrieving OSM object');$( "#waitDialog" ).dialog('close');}
+    });
+}

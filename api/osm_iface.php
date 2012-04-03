@@ -6,7 +6,7 @@ session_start();
 // osm api handler is instantiated if necessary
 if(!isset($_SESSION["api"]))
 { 
-	$api = new OSM_Api(array('appName'=>Conf::APP_NAME));
+	$api = new OSM_Api(array('appName'=>Conf::APP_NAME,'url'=>OSM_Api::URL_PROD_UK));
 	$_SESSION["api"] = $api;
 }
 else 
@@ -18,12 +18,21 @@ if(isset($_REQUEST["action"]))
 {
 	if($_REQUEST["action"] == "get" && isset($_GET["type"]) && isset($_GET["id"]))
 	{
-		$elt = $api->getObject($_GET["type"],$_GET["id"]);
-		echo $elt->asXmlStr();
+		try{			
+			$elt = $api->getObject($_GET["type"],$_GET["id"]);
+			echo $elt->asXmlStr();
+		}catch(Exception $e){
+			echo 0;
+		}
 	}
 	else if($_GET["action"] == "set" && isset($_GET["type"]) && isset($_GET["id"]) && isset($_GET["name"]))
 	{
-		$elt = $api->getObject($_GET["type"],$_GET["id"]);;
+		$elt = null;
+		try{			
+			$elt = $api->getObject($_GET["type"],$_GET["id"]);
+		}catch(Exception $e){
+			echo 0;
+		}
 		// search for the object
 		if($elt != null)
 		{
@@ -122,7 +131,8 @@ if(isset($_REQUEST["action"]))
 	}
 	else if($_GET["action"] == "save")
 	{
-		echo $api->revertObject(Conf::COMMIT_MESSAGE);
+		// TODO implement commits
+		echo $api->saveChanges(Conf::COMMIT_MESSAGE);
 	}
 	else 
 	{

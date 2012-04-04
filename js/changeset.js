@@ -25,6 +25,14 @@ function loadChangeset()
 }
 
 /**
+ * Get the OSM file which contains all modified objects
+ */
+function downloadOsmFile()
+{
+	window.open("api/osm_iface.php?action=getXml","_blank");
+}
+
+/**
  * Revert all changes to a specified object
  * @param type string node/way/relation
  * @param id int osm object id

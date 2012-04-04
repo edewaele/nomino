@@ -78,6 +78,8 @@ class OSM_Objects_Object implements OSM_Objects_IDirty {
 	}
 
 	public function delete() {
+		// action attribute is added for JOSM to know the object is dirty, if the changes are exported as a XML document
+		$this->_attrs["action"] = "delete";
 		$this->_deleted = true;
 		$this->setDirty();
 	}
@@ -123,6 +125,8 @@ class OSM_Objects_Object implements OSM_Objects_IDirty {
 			throw new OSM_Exception('duplicate tag "' . $tag->getKey() . '"');
 		}
 		$this->_tags[$tag->getKey()] = $tag;
+		// action attribute is added for JOSM to know the object is dirty, if the changes are exported as a XML document
+		$this->_attrs["action"] = "modify";
 		$this->setDirty();
 	}
 
@@ -147,6 +151,8 @@ class OSM_Objects_Object implements OSM_Objects_IDirty {
 		if (!array_key_exists($key, $this->_tags))
 			throw new OSM_Exception('Tag "' . $key . '" not found');
 		unset($this->_tags[$key]);
+		// action attribute is added for JOSM to know the object is dirty, if the changes are exported as a XML document
+		$this->_attrs["action"] = "modify";
 		$this->setDirty();
 	}
 
@@ -160,6 +166,8 @@ class OSM_Objects_Object implements OSM_Objects_IDirty {
 	public function setAttribute($key, $value) {
 
 		return $this->_attrs[$key] = $value;
+		// action attribute is added for JOSM to know the object is dirty, if the changes are exported as a XML document
+		$this->_attrs["action"] = "modify";
 		$this->setDirty();
 	}
 

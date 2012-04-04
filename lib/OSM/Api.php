@@ -755,4 +755,22 @@ class OSM_Api {
 		$userAgent .= self::USER_AGENT . ' ' . self::VERSION;
 		return $userAgent;
 	}
+	
+	/**
+	 * 
+	 */
+	public function getXMLDocument()
+	{
+		$xml = '<osm version="0.6" upload="true" generator="'.$this->getUserAgent().'">';
+		$objects = $this->_relations + $this->_ways + $this->_nodes;
+		foreach ($objects as $obj)
+		{
+			if($obj->isDirty())
+			{
+				$xml .= $obj->asXmlStr() . "";
+			}
+		}
+		$xml .= '</osm>';
+		return $xml;
+	}
 }

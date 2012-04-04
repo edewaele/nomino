@@ -64,22 +64,24 @@ $(function(){
 			</div>
 		</div>
 		<div id="tabs-2">
-			<h3>Names <input type="submit" value="Save" id="button_save_edit"></h3>
-			<table id="table_names">
-				<tr>
-					<td>Name</td>
-					<td><input type="text" id="edit_name" class="name_edit" name="name"></td>
-				</tr>
-			</table>
-			<p id="link_add_tr"><a href="javascript:addLine()"><img src="img/add.png"> Add translation</a></p>
-			<h3>Other tags</h3>
-			<table id="table_other_tags">
-			</table>
+			<form name="editNames" action="javascript:saveObject()">
+				<h3>Names <input type="submit" value="Save" id="button_save_edit"></h3>
+				<table id="table_names">
+					<tr>
+						<td>Name</td>
+						<td><input type="text" id="edit_name" class="name_edit" name="name"></td>
+					</tr>
+				</table>
+				<p id="link_add_tr"><a href="javascript:addLine()"><img src="img/add.png"> Add translation</a></p>
+				<h3>Other tags</h3>
+				<table id="table_other_tags">
+				</table>
+			</form>
 		</div>
 		<div id="tabs-3">
 			<h3>Changes 
 			<input type="submit" value="Submit changes" id="button_submit_changes" class="changesetButton" disabled="disabled" onclick="submitChanges()">
-<!-- 			<input type="submit" value="Download changeset" id="button_download_changes" class="changesetButton" disabled="disabled"> -->
+			<input type="submit" value="Download OSM file" id="button_download_changes" class="changesetButton" disabled="disabled" onclick="downloadOsmFile()">
 			</h3>
 			<div id="table_changes">
 			<ul></ul>

@@ -129,6 +129,12 @@ if(isset($_REQUEST["action"]))
 		$api->revertObject($_GET["type"],$_GET["id"]);;
 		echo 1;
 	}
+	else if($_GET["action"] == "getXml")
+	{
+		header('Content-type: application/xml');
+		header('Content-Disposition: attachment; filename="places.osm"');
+		echo $api->getXMLDocument();
+	}
 	else if($_GET["action"] == "save")
 	{
 		// TODO implement commits

@@ -25,7 +25,7 @@ function search_for_places(address)
 				// most place images are taken from Nominatim results
 				var imageURL =  places[numPlace].attributes.icon?places[numPlace].attributes.icon:"img/marker.png";
 				// list item
-				$("#list_find_places ul").append("<li onmouseover=\"$(this).addClass('place_highlight');map_find_places.setCenter(LonLatToM(new OpenLayers.LonLat("+places[numPlace].geometry.x+","+places[numPlace].geometry.y+")))\" onmouseout=\"$(this).removeClass('place_highlight');\"><img src=\""+imageURL+"\"><a href=\"javascript:beginEdit('"+places[numPlace].attributes.osm_type+"',"+places[numPlace].attributes.osm_id+")\">"+places[numPlace].attributes.name+"</a> <span class=\"placeDetails\">("+places[numPlace].attributes.class+","+places[numPlace].attributes.type+")</span></li>");
+				$("#list_find_places ul").append("<li onmouseover=\"$(this).addClass('place_highlight');map_find_places.setCenter(LonLatToM(new OpenLayers.LonLat("+places[numPlace].geometry.x+","+places[numPlace].geometry.y+")))\" onmouseout=\"$(this).removeClass('place_highlight');\"><img src=\""+imageURL+"\"><a href=\"javascript:beginEdit('"+places[numPlace].attributes.osm_type+"',"+places[numPlace].attributes.osm_id+")\">"+places[numPlace].attributes.name+"</a> <span class=\"placeDetails\">("+places[numPlace].attributes["class"]+","+places[numPlace].attributes.type+")</span></li>");
 				// feature on the map
 				var style = OpenLayers.Util.extend({}, iconPlace);
 				style.externalGraphic = imageURL;

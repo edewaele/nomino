@@ -57,7 +57,7 @@ if(isset($_REQUEST["action"]))
 			// set the translations
 			foreach($_GET as $tag_key => $tag_value)
 			{
-				if(strlen($tag_key)==7 && substr($tag_key,0,5) == "name:")
+				if(strlen($tag_key)==7 && substr($tag_key,0,5) == "name:" && strlen($tag_value) > 0)
 				{
 					if($elt->getTag($tag_key) != null)
 					{

@@ -1,5 +1,4 @@
 
-var ISO639 = ['aa', 'ab', 'ae', 'af', 'ak', 'am', 'an', 'ar', 'as', 'av', 'ay', 'az', 'ba', 'be', 'bg', 'bh', 'bi', 'bm', 'bn', 'bo', 'br', 'bs', 'ca', 'ce', 'ch', 'co', 'cr', 'cs', 'cu', 'cv', 'cy', 'da', 'de', 'dv', 'dz', 'ee', 'el', 'en', 'eo', 'es', 'et', 'eu', 'fa', 'ff', 'fi', 'fj', 'fo', 'fr', 'fy', 'ga', 'gd', 'gl', 'gn', 'gu', 'gv', 'ha', 'he', 'hi', 'ho', 'hr', 'ht', 'hu', 'hy', 'hz', 'ia', 'id', 'ie', 'ig', 'ii', 'ik', 'io', 'is', 'it', 'iu', 'ja', 'jv', 'ka', 'kg', 'ki', 'kj', 'kk', 'kl', 'km', 'kn', 'ko', 'kr', 'ks', 'ku', 'kv', 'kw', 'ky', 'la', 'lb', 'lg', 'li', 'ln', 'lo', 'lt', 'lu', 'lv', 'mg', 'mh', 'mi', 'mk', 'ml', 'mn', 'mo', 'mr', 'ms', 'mt', 'my', 'na', 'nb', 'nd', 'ne', 'ng', 'nl', 'nn', 'no', 'nr', 'nv', 'ny', 'oc', 'oj', 'om', 'or', 'os', 'pa', 'pi', 'pl', 'ps', 'pt', 'qu', 'rm', 'rn', 'ro', 'ru', 'rw', 'sa', 'sc', 'sd', 'se', 'sg', 'si', 'sk', 'sl', 'sm', 'sn', 'so', 'sq', 'sr', 'ss', 'st', 'su', 'sv', 'sw', 'ta', 'te', 'tg', 'th', 'ti', 'tk', 'tl', 'tn', 'to', 'tr', 'ts', 'tt', 'tw', 'ty', 'ug', 'uk', 'ur', 'uz', 've', 'vi', 'vo', 'wa', 'wo', 'xh', 'yi', 'yo', 'za', 'zh'];
 var objectNames = {};
 var rowLanguages = {};
 var numAltName = 0;
@@ -78,26 +77,60 @@ function beginEdit(type,id)
 			$("#table_other_tags").empty();
 			$("#table_names .alternative").remove();
 			numAltName = 0;
-			$(e).find('tag').each(function () {
-			    if($(this).attr("k").substring(0,4) != "name")
+			
+			// tags are sorted by keys
+			var tags = {};// associatice array tag key => tags values
+			var keys = [];// array of tag keys
+			$(e).find('tag').each(function(){
+				tags[$(this).attr("k")] = $(this).attr("v");
+				keys.push($(this).attr("k"));
+			});
+			keys.sort();// keys are sorted
+			
+			for(var numKey in keys) {
+				var key = keys[numKey];
+			    if(key.substring(0,4) != "name")
 			    {
-			    	$("#table_other_tags").append("<tr><td>"+$(this).attr("k")+"</td><td>"+$(this).attr("v")+"</td></tr>")
+			    	$("#table_other_tags").append("<tr><td>"+key+"</td><td>"+tags[key]+"</td></tr>")
 			    }
-			    else if($(this).attr("k") == "name")
+			    else if(key == "name")
 			    {
-			    	$("#edit_name").val($(this).attr("v"));
-			    	objectNames["name"] = $(this).attr("v");
+			    	$("#edit_name").val(tags[key]);
+			    	objectNames["name"] = tags[key];
 			    }
 			    else
 			    {
-			    	$("#table_names").append("<tr class=\"alternative\" id=\"alternative-"+numAltName+"\"><td>"+$(this).attr("k").substring(5)+"</td>" +
-			    			"<td><input name=\""+$(this).attr("k")+"\" type=\"text\" value=\""+$(this).attr("v")+"\" id=\"name-edit-"+numAltName+"\" class=\"name_edit\"></td>" +
+			    	var code = key.substring(5);
+			    	var label = code;
+					if(code in LANGUAGE_CODES)
+						label += ' <span class="placeDetails">('+LANGUAGE_CODES[code]+')</span>';
+			    	$("#table_names").append("<tr class=\"alternative\" id=\"alternative-"+numAltName+"\"><td>"+label+"</td>" +
+			    			"<td><input name=\""+key+"\" type=\"text\" value=\""+tags[key]+"\" id=\"name-edit-"+numAltName+"\" class=\"name_edit\"></td>" +
 			    			"<td><a href=\"javascript:removeRow("+numAltName+")\"><img src=\"img/delete.png\"></a></td></tr>");
-			    	objectNames[$(this).attr("k")] = $(this).attr("v");
-			    	rowLanguages[numAltName] = $(this).attr("k");
+			    	objectNames[key] = tags[key];
+			    	rowLanguages[numAltName] = key;
 			    	numAltName++;
 			    }
-			});
+			};
+			
+			// if the preferred language was set and there is no such translation in the object
+			// a line is added
+			if($.cookie("prefLang"))
+			{
+				var key = "name:"+$.cookie("prefLang");
+				if(typeof(objectNames[key]) == 'undefined')
+				{
+					var langLabel = "";
+					if($.cookie("prefLang") in LANGUAGE_CODES)
+						langLabel += ' <span class="placeDetails">('+LANGUAGE_CODES[$.cookie("prefLang")]+')</span>';
+					objectNames[key] = "";
+			    	rowLanguages[numAltName] = key;
+			    		$("#table_names").append("<tr class=\"alternative\" id=\"alternative-"+numAltName+"\"><td>"+$.cookie("prefLang")+langLabel+"</td>" +
+			    			"<td><input name=\""+key+"\" type=\"text\" value=\"\" id=\"name-edit-"+numAltName+"\" class=\"name_edit\"></td>" +
+			    			"<td><a href=\"javascript:removeRow("+numAltName+")\"><img src=\"img/delete.png\"></a></td></tr>");
+				}
+			}
+			numAltName++;
 			
 			setChangeEvents();
 			$("#tabs").tabs("enable",1);
@@ -108,6 +141,10 @@ function beginEdit(type,id)
     });
 }
 
+/**
+ * R
+ * @param num
+ */
 function removeRow(num)
 {
 	$("#alternative-"+num).remove();
@@ -130,7 +167,10 @@ function selectLang(event)
 			rowLanguages[numAltName-1] = "name:"+$("#edit_lang").val();
 			objectNames["name:"+$("#edit_lang").val()] = "";
 			$("#alternative-"+(numAltName-1)+" .name_edit").attr("name","name:"+$("#edit_lang").val());
-			$("#alternative-"+(numAltName-1)+" td").eq(0).html($("#edit_lang").val());
+			var label = $("#edit_lang").val();
+			if($("#edit_lang").val() in LANGUAGE_CODES)
+				label += ' <span class="placeDetails">('+LANGUAGE_CODES[$("#edit_lang").val()]+')</span>';
+			$("#alternative-"+(numAltName-1)+" td").eq(0).html(label);
 			$("#alternative-"+(numAltName-1)+" td").eq(1).show();
 			$("#alternative-"+(numAltName-1)+" td").eq(2).show();
 			// the name edit field is given the focus

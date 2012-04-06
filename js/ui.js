@@ -35,23 +35,21 @@ function LonLatToM(ll)
 	return ll.transform(new OpenLayers.Projection("EPSG:4326"),new OpenLayers.Projection("EPSG:900913"));  
 }
 
-
-function get_osm_url (bounds) {
-  var res = this.map.getResolution();
-  var x = Math.round ((bounds.left - this.maxExtent.left) / (res * this.tileSize.w));
-  var y = Math.round ((this.maxExtent.top - bounds.top) / (res * this.tileSize.h));
-  var z = this.map.getZoom();
-  var limit = Math.pow(2, z);
-
-  if (y < 0 || y >= limit)
-    {
-      return null;
-    }
-  else
-    {
-      return this.url + z + "/" + x + "/" + y + "." + this.type; 
-    }
-}
+OpenLayers.Layer.OSM.Toolserver = OpenLayers.Class(OpenLayers.Layer.OSM, {
+	
+	initialize: function(name, options) {
+		var url = [
+			"http://a.www.toolserver.org/tiles/" + name + "/${z}/${x}/${y}.png", 
+			"http://b.www.toolserver.org/tiles/" + name + "/${z}/${x}/${y}.png", 
+			"http://c.www.toolserver.org/tiles/" + name + "/${z}/${x}/${y}.png"
+		];
+		
+		options = OpenLayers.Util.extend({numZoomLevels: 18}, options);
+		OpenLayers.Layer.OSM.prototype.initialize.apply(this, [name, url, options]);
+	},
+	
+	CLASS_NAME: "OpenLayers.Layer.OSM.Toolserver"
+});
 
 $(function() {
 	$( "#tabs" ).tabs({
@@ -60,15 +58,16 @@ $(function() {
 	$("#tabs").tabs("disable",1);
 	
 	map_find_places = new OpenLayers.Map("map_find_places",
-	{                maxExtent: new OpenLayers.Bounds(-20037508.34,-20037508.34,20037508.34,20037508.34),
-		numZoomLevels:18,
-        maxResolution: 156543.0399,
+	{   
+		maxExtent: new OpenLayers.Bounds(-20037508.34,-20037508.34,20037508.34,20037508.34),
+		maxResolution: 156543.0399,
+		numZoomLevels: 19,
 		units:'m',
 		projection: new OpenLayers.Projection("EPSG:900913"),
 		displayProjection: new OpenLayers.Projection("EPSG:4326"),
 	       controls:[
    					new OpenLayers.Control.Navigation(),
-					new OpenLayers.Control.PanZoom(),
+					new OpenLayers.Control.PanZoom()
 			  ]
 	});
 	
@@ -116,16 +115,16 @@ $(function() {
 	map_find_places.addControl(oClick);
 	oClick.activate();
 	
-	var mapquest = new OpenLayers.Layer.TMS( 
-	          "MapQuest Tiles", 
-	          ["http://otile1.mqcdn.com/tiles/1.0.0/osm/"],
-	          {type:'png',
-	          getURL: get_osm_url,
-		  transitionEffect: 'resize',
-	          displayOutsideMaxExtent: true }, {'buffer':0} );
+	layerMapquest = new OpenLayers.Layer.OSM("MapQuest Tiles", ["http://otile1.mqcdn.com/tiles/1.0.0/osm/${z}/${x}/${y}.png"]);
+	map_find_places.addLayer(layerMapquest);
 	
+	layerNoLabels = new OpenLayers.Layer.OSM.Toolserver('osm-no-labels');
+	map_find_places.addLayer(layerNoLabels);
 	
-	map_find_places.addLayer(mapquest);
+	layerLang = new OpenLayers.Layer.OSM.Toolserver('osm-labels-en',{isBaseLayer:false});
+	map_find_places.addLayer(layerLang);
+	
+	updateMapDisplay();
 
 	map_find_places.zoomTo(4);
 	map_find_places.setCenter(LonLatToM(new OpenLayers.LonLat(2,47)));
@@ -170,8 +169,109 @@ $(function() {
     $("#radio_find_mode1").click(function(){$("#find_mode_1").show();$("#find_mode_2").hide();});
     $("#radio_find_mode2").click(function(){$("#find_mode_2").show();$("#find_mode_1").hide();});
     
+
+    $( "#preferencesDialog" ).dialog({
+		height: 350,
+		width:500,
+		modal: true,
+		resizable:false,
+		autoOpen:false,
+		closeOnEscape:true,
+		buttons:{
+			"Save":function(){
+				savePreferences();
+				$(this).dialog('close');
+			},
+			"Cancel":function(){
+				$(this).dialog('close');
+			}
+		}
+	});
+    $("input[name='mapLayer']").change(function(){
+    	if($("input[name='mapLayer']:checked").attr("id") == "radioPrefToolserver")
+    		$("#selectPrefMapLang").removeAttr("disabled");
+    	else 
+    		$("#selectPrefMapLang").attr("disabled","disabled");
+    });
+    $("#checkPrefAutoTrans").click(function(){
+    	if($("#checkPrefAutoTrans").attr("checked") == "checked")
+    		$("#textPrefLanguage").removeAttr("disabled");
+    	else 
+    		$("#textPrefLanguage").attr("disabled","disabled");
+    });
+    $("#textPrefLanguage").autocomplete({source:ISO639});
+    
+    
+    $("#tabs .ui-tabs-nav").append('<a href="javascript:showPreferences()" style="float:right"><img src="img/prefs.png"> Preferences<a>');
+    
 //    $("#list_find_places ul li").hover(
 //    		function(){$(this).addClass("place_highlight");},
 //    		function(){$(this).removeClass("place_highlight");}
 //    );
 });
+
+/**
+ * Display the preferences dialog and set the fields according to the settings
+ */
+function showPreferences()
+{
+	if(!$.cookie("map"))
+	{
+		$("#radioPrefMapquest").attr("checked","checked");
+		$("#selectPrefMapLang").attr("disabled","disabled");
+	}
+	else
+	{
+		$("#radioPrefToolserver").attr("checked","checked");
+		$("#selectPrefMapLang").val($.cookie("map"));
+		$("#selectPrefMapLang").removeAttr("disabled");
+	}
+	if($.cookie("prefLang"))
+	{
+		$("#checkPrefAutoTrans").attr("checked","checked");
+		$("#textPrefLanguage").val($.cookie("prefLang"));
+		$("#textPrefLanguage").removeAttr("disabled");
+	}
+	else
+	{
+		$("#checkPrefAutoTrans").removeAttr("checked");
+		$("#textPrefLanguage").attr("disabled","disabled");
+	}
+	$( "#preferencesDialog" ).dialog("open");
+}
+
+/**
+ * Triggered when the user saves the preferences 
+ */
+function savePreferences()
+{
+	if($("input[name='mapLayer']:checked").attr("id") == "radioPrefToolserver")
+		$.cookie("map",$("#selectPrefMapLang").val());
+	else 
+		$.cookie("map","");
+	if($("#checkPrefAutoTrans").attr("checked") == "checked")
+		$.cookie("prefLang",$("#textPrefLanguage").val());
+	else
+		$.cookie("prefLang","");
+	
+	updateMapDisplay();
+}
+
+/**
+ * Update the map layer, Mapquest or Toolserver + language
+ */
+function updateMapDisplay()
+{
+	if(!$.cookie("map"))
+	{
+		map_find_places.setBaseLayer(layerMapquest);
+		layerLang.setVisibility(false);
+	}
+	else
+	{
+		map_find_places.setBaseLayer(layerNoLabels);
+		layerLang.setVisibility(true);
+		layerLang.url = "http://a.www.toolserver.org/tiles/osm-labels-"+$.cookie("map")+"/${z}/${x}/${y}.png";
+		layerLang.redraw();
+	}
+}

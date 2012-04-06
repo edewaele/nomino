@@ -74,6 +74,9 @@ function beginEdit(type,id)
 			editedObject.id = id;
 			objectNames = {};
 			
+			// All name fields are hidden
+			for(var key in NAME_FIELDS)hideNameField(key);
+			
 			$("#table_other_tags").empty();
 			$("#table_names .alternative").remove();
 			numAltName = 0;
@@ -89,7 +92,11 @@ function beginEdit(type,id)
 			
 			for(var numKey in keys) {
 				var key = keys[numKey];
-			    if(key.substring(0,4) != "name")
+				if(key in NAME_FIELDS)
+			    {
+			    	displayNameField(key,tags[key]);
+			    }
+				else if(key.substring(0,4) != "name")
 			    {
 			    	$("#table_other_tags").append("<tr><td>"+key+"</td><td>"+tags[key]+"</td></tr>")
 			    }
@@ -198,5 +205,33 @@ function addLine()
 		typingLanguage = true;
 		$("#link_add_tr").hide();
 	}
+	setChangeEvents();
+}
+
+/**
+ * Add a name tag in the tag set, and display the table row with the given value 
+ * @param key name tag key
+ * @param value name tag key
+ */
+function displayNameField(key,value)
+{
+	if(! key in NAME_FIELDS)return;
+	objectNames[key] = value;
+	$("#row_edit_"+key).show();
+	$("#link_set_"+key).hide();
+	$("#edit_"+key).val(value);
+	setChangeEvents();
+}
+
+/**
+ * Delete a name tag from the tag set, and hide the table row
+ * @param key name tag key
+ */
+function hideNameField(key)
+{
+	if(! key in NAME_FIELDS)return;
+	delete objectNames[key];
+	$("#row_edit_"+key).hide();
+	$("#link_set_"+key).show();
 	setChangeEvents();
 }

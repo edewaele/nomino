@@ -19,9 +19,14 @@ $langCodeJS = "";
 foreach(Conf::$LANGUAGE_CODES as $k => $v){
 	$langCodeJS .= ($langCodeJS==""?"":",") . "'$k':'$v'";
 }
+$altNames = "";
+foreach(Conf::$NAME_FIELDS as $k => $v){
+	$altNames .= ($altNames==""?"":",") . "'$k':'$v'";
+}
 ?> 
 <script type="text/javascript">
 var LANGUAGE_CODES = {<?php echo $langCodeJS;?>};
+var NAME_FIELDS = {<?php echo $altNames;?>};
 var ISO639 = [];
 for(var code in LANGUAGE_CODES)ISO639.push(code);
 </script>
@@ -96,8 +101,19 @@ $(function(){
 						<td>Name</td>
 						<td><input type="text" id="edit_name" class="name_edit" name="name"></td>
 					</tr>
+					<?php foreach(Conf::$NAME_FIELDS as $key => $label){?>
+					<tr id="row_edit_<?php echo $key;?>">
+						<td><?php echo $label;?></td>
+						<td><input type="text" id="edit_<?php echo $key;?>" class="name_edit" name="<?php echo $key;?>"></td>
+						<td><a href="javascript:hideNameField('<?php echo $key;?>')"><img src="img/delete.png"></td></td>
+					</tr>
+					<?php }?>
 				</table>
-				<p id="link_add_tr"><a href="javascript:addLine()"><img src="img/add.png"> Add translation</a></p>
+				<p id="link_add_tr"><a href="javascript:addLine()"><img src="img/add.png"> Add translation</a>
+				<?php foreach(Conf::$NAME_FIELDS as $key => $label){?>
+				<a href="javascript:displayNameField('<?php echo $key;?>','')" id="link_set_<?php echo $key;?>"><img src="img/add.png"> Set <?php echo strtolower($label);?></a>
+				<?php }?>
+				</p>
 				<h3>Other tags</h3>
 				<table id="table_other_tags">
 				</table>

@@ -54,7 +54,8 @@ function search_for_osm_object()
 }
 
 /**
- * 
+ * Search for places related to a lon/lat point, and display a list of territories.
+ * The user is then asked to choose a territory in the list.
  * @param lon
  * @param lat
  */

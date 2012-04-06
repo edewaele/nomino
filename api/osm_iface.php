@@ -39,7 +39,7 @@ if(isset($_REQUEST["action"]))
 			// Iterate all existing name:** tags in the object 
 			foreach(array_keys($elt->getTags()) as $existingTag)
 			{
-				if(strlen($existingTag)==7 && substr($existingTag,0,5) == "name:")
+				if(strlen($existingTag)==7 && substr($existingTag,0,5) == "name:" || array_key_exists($existingTag,Conf::$NAME_FIELDS))
 				{
 					// If this tag is not in the request, it was removed by the user
 					if(! array_key_exists($existingTag,$_GET))
@@ -57,7 +57,8 @@ if(isset($_REQUEST["action"]))
 			// set the translations
 			foreach($_GET as $tag_key => $tag_value)
 			{
-				if(strlen($tag_key)==7 && substr($tag_key,0,5) == "name:" && strlen($tag_value) > 0)
+				if(strlen($tag_key)==7 && substr($tag_key,0,5) == "name:" && strlen($tag_value) > 0 
+						|| array_key_exists($tag_key,Conf::$NAME_FIELDS) && strlen($tag_value) > 0)
 				{
 					if($elt->getTag($tag_key) != null)
 					{

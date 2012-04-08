@@ -1,9 +1,9 @@
 
-var objectNames = {};
-var rowLanguages = {};
+var objectNames = {};// object of tag keys and values in the editing environment
+var rowLanguages = {};// array of tags keys in the form
 var numAltName = 0;
 var typingLanguage = false;
-var editedObject = {};
+var editedObject = {};// information abot the currenlty edited object
 
 $(function(){	
 	$("#button_save_edit").click(saveObject);
@@ -15,6 +15,13 @@ function setChangeEvents()
 	$(".name_edit").change(function(){
 		objectNames[$(this).attr("name")] = $(this).val();
 	});
+	// set the autocompletion for all edits fields, with existing values
+	$(".name_edit").autocomplete("destroy");
+	var proposedNames = [];
+	$(".name_edit").each(function(){
+		proposedNames.push($(this).val());
+	});
+	$(".name_edit").autocomplete({source:proposedNames});
 }
 
 /**
@@ -149,7 +156,7 @@ function beginEdit(type,id)
 }
 
 /**
- * R
+ * Remove a translation row
  * @param num
  */
 function removeRow(num)

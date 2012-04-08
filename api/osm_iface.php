@@ -37,7 +37,7 @@ if(isset($_REQUEST["action"]))
 		if($elt != null)
 		{
 			// Iterate all existing name:** tags in the object 
-			foreach(array_keys($elt->getTags()) as $existingTag)
+			foreach(array_keys($elt->findTags()) as $existingTag)
 			{
 				if(strlen($existingTag)==7 && substr($existingTag,0,5) == "name:" || array_key_exists($existingTag,Conf::$NAME_FIELDS))
 				{
@@ -94,7 +94,7 @@ if(isset($_REQUEST["action"]))
 			{
 				// list of dirty tags
 				$dirtyTags = "";
-				foreach($osmObject->getTags() as $tag)
+				foreach($osmObject->findTags() as $tag)
 				{
 					if($tag->isDirty())
 					{
@@ -127,7 +127,7 @@ if(isset($_REQUEST["action"]))
 	}
 	else if($_GET["action"] == "revert" && isset($_GET["type"]) && isset($_GET["id"]))
 	{
-		$api->revertObject($_GET["type"],$_GET["id"]);;
+		$api->removeObject($_GET["type"],$_GET["id"]);;
 		echo 1;
 	}
 	else if($_GET["action"] == "getXml")

@@ -149,6 +149,17 @@ $(function(){
 			<p>The "Download OSM file" button returns an OpenStreetMap XML file, which you can open in JOSM or Merkaartor.
 			The changes are not sent to OpenStreetMap.</p>
 			<p>The "Submit changes" button allows to upload your edits to OpenStreetMap server.</p>
+			<h2>About</h2>
+			<p>This application was developed by Emmanuel Dewaele.
+			Nomino is free sotware released under the <a href="http://www.gnu.org/licenses/agpl-3.0.html">Affero General Public License</a>.
+			You are free to contribute on <a href="http://gitorious.org/nomino">Gitorious</a>.</p>
+			<p>Acknowledgements:</p>
+			<ul>
+				<li>Cyrille Giquello for <a href="https://github.com/Cyrille37/yapafo">yapafo</a>, the great OpenStreetMap-handling library</li>
+				<li>Toolserver for the <a href="https://wiki.toolserver.org/view/OpenStreetMap">multilingual maps</a></li>
+				<li><a href="http://nominatim.openstreetmap.org/">Nominatim</a>'s developers, for the geocoding API</li>
+				<li>Mapquest for <a href="http://open.mapquest.com/">Open Mapquest</a> tiles</li>
+			</ul>
 		</div>
 	</div>
 </div>

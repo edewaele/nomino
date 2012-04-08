@@ -36,8 +36,9 @@ class OSM_Objects_Object implements OSM_Objects_IDirty {
 	 */
 	public function __construct($id=null) {
 
-		if( $id!=null && $id!='' && $id!=0 )
+		if ($id != null && $id != '' && $id != 0)
 			$this->setId($id);
+		$this->setDirty();
 	}
 
 	public function getId() {
@@ -75,11 +76,14 @@ class OSM_Objects_Object implements OSM_Objects_IDirty {
 	 */
 	public function setDirty($dirty=true) {
 		$this->_dirty = $dirty;
+		// action attribute is added for JOSM to know the object is dirty, if the changes are exported as a XML documents
+		if($this->_deleted)
+			$this->_attrs["action"] = "delete";
+		else 
+			$this->_attrs["action"] = "modify";
 	}
 
 	public function delete() {
-		// action attribute is added for JOSM to know the object is dirty, if the changes are exported as a XML document
-		$this->_attrs["action"] = "delete";
 		$this->_deleted = true;
 		$this->setDirty();
 	}
@@ -92,21 +96,66 @@ class OSM_Objects_Object implements OSM_Objects_IDirty {
 	}
 
 	/**
+	 * Like findTags but return a bool instead of tags.
+	 * 
+	 * @param array $searchTags
+	 * @return bool
+	 */
+	public function hasTags(array $searchTags )
+	{
+		$resultTags = $this->findTags( $searchTags);
+		if( count($resultTags) == count($searchTags) )
+			return true ;
+		return false ;
+	}
+
+	/**
+	 * Return all tags.
+	 * 
+	 * Returned tags could be selected
+	 * 
+	 * @param array $searchTags Optionnal. If you want to filter the returned tags.
+	 * @return OSM_Objects_Tag[]
+	 * @see findTag()
+	 */
+	public function &findTags(array $searchTags=null) {
+
+		if ($searchTags == null)
+			return $this->_tags;
+
+		$resultTags = array();
+		foreach ($searchTags as $k=>$v)
+		{
+			if( ($t=$this->getTag($k, $v))!=null )
+			{
+				$resultTags[] = $t ;
+			}
+		}
+		return $resultTags ;
+	}
+
+	/**
+	 * Retreive a tag by Key.
+	 * 
+	 * A value could be provided to enforce the test.
+	 * 
 	 * @param string $key
+	 * @param string $v Optional. If not provided or if an empty string or a '*' the value will not be tested.
 	 * @return OSM_Objects_Tag
 	 */
-	public function getTag($key) {
+	public function getTag($key, $v='') {
 
 		if (array_key_exists($key, $this->_tags))
 		{
+			if (!empty($v) && $v != '*')
+			{
+				if ($this->_tags[$key]->getValue() == $v)
+					return $this->_tags[$key];
+				return null;
+			}
 			return $this->_tags[$key];
 		}
 		return null;
-	}
-
-	public function getTags()
-	{
-		return $this->_tags ;
 	}
 
 	public function setTag($key, $value) {
@@ -125,8 +174,6 @@ class OSM_Objects_Object implements OSM_Objects_IDirty {
 			throw new OSM_Exception('duplicate tag "' . $tag->getKey() . '"');
 		}
 		$this->_tags[$tag->getKey()] = $tag;
-		// action attribute is added for JOSM to know the object is dirty, if the changes are exported as a XML document
-		$this->_attrs["action"] = "modify";
 		$this->setDirty();
 	}
 
@@ -140,7 +187,7 @@ class OSM_Objects_Object implements OSM_Objects_IDirty {
 				throw new OSM_Exception('duplicate tag "' . $tag->getKey() . '"');
 			}
 		}
-		foreach( $tags as $tag )
+		foreach ($tags as $tag)
 		{
 			$this->addTag($tag);
 		}
@@ -151,8 +198,6 @@ class OSM_Objects_Object implements OSM_Objects_IDirty {
 		if (!array_key_exists($key, $this->_tags))
 			throw new OSM_Exception('Tag "' . $key . '" not found');
 		unset($this->_tags[$key]);
-		// action attribute is added for JOSM to know the object is dirty, if the changes are exported as a XML document
-		$this->_attrs["action"] = "modify";
 		$this->setDirty();
 	}
 
@@ -166,8 +211,6 @@ class OSM_Objects_Object implements OSM_Objects_IDirty {
 	public function setAttribute($key, $value) {
 
 		return $this->_attrs[$key] = $value;
-		// action attribute is added for JOSM to know the object is dirty, if the changes are exported as a XML document
-		$this->_attrs["action"] = "modify";
 		$this->setDirty();
 	}
 

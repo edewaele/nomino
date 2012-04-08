@@ -69,18 +69,20 @@ function search_for_position(lon,lat)
 			'lat':lat
 		},
 		success: function(e){
-			var admin_levels = ["country","state","state_district","county","city","city_district","subsurb","road"];
+			var forbidden_admin_levels = ["country_code","postcode","house_number"];
 			var adressLines = [];
 			var previousQuery = "";
 					
-			for(var level in admin_levels)
+			var addressParts = $(e).find("addressparts").children();
+			for(var numItem = addressParts.length-1;numItem >= 0; numItem--)
 			{
-				if($(e).find(admin_levels[level]).length > 0)
+				var key = addressParts[numItem].nodeName;
+				if(forbidden_admin_levels.indexOf(key) == -1)
 				{
-					var value = $(e).find(admin_levels[level]).text();
+					var value = addressParts.eq(numItem).text();
 					previousQuery = value + (previousQuery!=""?(", "+previousQuery):""); 
 					adressLines.push({
-						type:admin_levels[level],
+						type:key,
 						name:value,
 						query:previousQuery
 					});

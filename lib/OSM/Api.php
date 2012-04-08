@@ -20,7 +20,7 @@ spl_autoload_register(array('OSM_Api', 'autoload'));
  * @author cyrille
  */
 class OSM_Api {
-	const VERSION = '0.1';
+	const VERSION = '0.2';
 	const USER_AGENT = 'Yapafo';
 
 	const URL_DEV_UK = 'http://api06.dev.openstreetmap.org/api/0.6';
@@ -32,23 +32,66 @@ class OSM_Api {
 	const OBJTYPE_WAY = 'way';
 	const OBJTYPE_RELATION = 'relation';
 
-	protected $_url;
-	protected $_url4Write;
+	/**
+	 * Query form: http://api.openstreetmap.fr/query_form.html
+	 */
+	const OAPI_URL_FR = 'http://api.openstreetmap.fr/oapi/interpreter';
+	const OAPI_URL_RU = 'http://overpass.osm.rambler.ru/';
+	const OAPI_URL_LETUFFE = 'http://overpassapi.letuffe.org/api/interpreter';
+	const OAPI_URL_DE = 'http://www.overpass-api.de/api/interpreter';
+
 	protected $_options = array(
-		'url' => null,
-		'url4Write' => null,
+		// simulation is set by default to avoid (protected against) unwanted write !
 		'simulation' => true,
+		'url' => self::URL_PROD_FR,
+		'url4Write' => self::URL_PROD_UK,
 		'user' => null,
 		'password' => null,
+		// to store every network communications (load/save) in a file.
 		'outputFolder' => null,
 		'appName' => '', // name for the application using the API
-		'log' => array('level' => OSM_ZLog::LEVEL_ERROR)
+		'log' => array('level' => OSM_ZLog::LEVEL_ERROR),
+		'oapi_url' => self::OAPI_URL_FR
 	);
+
+	protected $_stats = array(
+		'requestCount'=>0,
+		'loadedBytes'=> 0
+		);
+	protected $_url;
+	protected $_url4Write;
 	protected $_relations = array();
 	protected $_ways = array();
 	protected $_nodes = array();
 	protected $_newIdCounter = -1;
+	/**
+	 * Works with $_options['outputFolder']. It's used to construct the filename.
+	 * @var int
+	 */
+	protected $_outputWriteCount = 0 ;
+
+	/**
+	 * Store all xml Objects
+	 * @var SimpleXMLElement
+	 */
 	protected $_loadedXml = array();
+
+	/**
+	 * autoloader
+	 *
+	 * @todo Is it clean to get an autoloader ? Should coder get it in an another place ?
+	 * @param string $class Name of class
+	 * @return boolean
+	 */
+	public static function autoload($class) {
+		$file = __DIR__ . '/../' . str_replace('_', '/', $class) . '.php';
+		//echo 'autoload search for '.$file."\n";
+		if (file_exists($file))
+		{
+			return include_once $file;
+		}
+		return false;
+	}
 
 	/**
 	 * @param bool $devMode Opération sur BdD de dev ou de prod. Par défaut sur l'API de DEV pour éviter les erreurs.
@@ -71,32 +114,23 @@ class OSM_Api {
 
 		if (empty($this->_options['url']))
 		{
-			throw new OSM_Exception('Url must be set');
+			throw new OSM_Exception('Option "url" must be set');
 		}
 
-		if (empty($this->_options['url4Write']))
+		if (empty($this->_options['oapi_url']))
 		{
-			$this->_options['url4Write'] = $this->_options['url'];
+			throw new OSM_Exception('Option "oapi_url" must be set');
+		}
+
+		if (! empty($this->_options['outputFolder']))
+		{
+			if( !file_exists($this->_options['outputFolder']))
+			{
+				throw new OSM_Exception('Option "outputFolder" is set, but the folder does not exists');
+			}
 		}
 
 		OSM_ZLog::debug(__METHOD__, 'url: ' . $this->_options['url'] . ', url4Write: ' . $this->_options['url4Write']);
-	}
-
-	/**
-	 * autoloader
-	 *
-	 * @param string $class Name of class
-	 *
-	 * @return boolean
-	 */
-	public static function autoload($class) {
-		$file = __DIR__ . '/../' . str_replace('_', '/', $class) . '.php';
-		//echo 'autoload search for '.$file."\n";
-		if (file_exists($file))
-		{
-			return include_once $file;
-		}
-		return false;
 	}
 
 	/**
@@ -121,23 +155,15 @@ class OSM_Api {
 		return $this;
 	}
 
-	public function getLastLoadedXml() {
+	public function getLastLoadedXmlObject() {
 		return $this->_loadedXml[count($this->_loadedXml) - 1];
 	}
 
-	public function httpGet($relativeUrl) {
-		return $this->_http($relativeUrl, null, 'GET');
+	public function getLastLoadedXmlString() {
+		return $this->_loadedXml[count($this->_loadedXml) - 1]->asXML();
 	}
 
-	public function httpPut($relativeUrl, $data = null) {
-		return $this->_http($relativeUrl, $data, 'PUT');
-	}
-
-	public function httpPost($relativeUrl, $data = null) {
-		return $this->_http($relativeUrl, $data, 'POST');
-	}
-
-	protected function _http($relativeUrl, $data=null, $method='GET') {
+	protected function _httpApi($relativeUrl, $data=null, $method='GET') {
 
 		$url = null;
 		switch ($method)
@@ -168,7 +194,7 @@ class OSM_Api {
 			$opts = array('http' =>
 				array(
 					'method' => $method,
-					'user_agent' => $this->getUserAgent(),
+					'user_agent' => $this->_getUserAgent(),
 					'header' => /* implode("\r\n", $headers) */$headers,
 				)
 			);
@@ -181,7 +207,7 @@ class OSM_Api {
 			$opts = array('http' =>
 				array(
 					'method' => $method,
-					'user_agent' => $this->getUserAgent(),
+					'user_agent' => $this->_getUserAgent(),
 					//'header' => 'Content-type: application/x-www-form-urlencoded',
 					'header' => /* implode("\r\n", $headers) */$headers,
 					'content' => $postdata
@@ -191,25 +217,42 @@ class OSM_Api {
 
 		$context = stream_context_create($opts);
 
+		$this->_stats['requestCount']++;
+
 		$result = @file_get_contents($url, false, $context);
 		if ($result === false)
 		{
-			throw new OSM_HttpException($http_response_header);
+			$e = error_get_last();
+			if( isset($http_response_header) )
+			{
+				throw new OSM_HttpException($http_response_header);
+			}
+			else
+			{
+				throw new OSM_HttpException( $e['message'] );
+			}
 		}
 
-		$this->_loadedXml[] = $result;
+		$this->_stats['loadedBytes'] += strlen($result);
 
 		return $result;
 	}
 
 	/**
-	 * @return OSM_Objects_Object
+	 * Return the designated object.
+	 * 
+	 * Reuse the loaded one if exists and $full is not set.
+	 * 
+	 * @param type $type
+	 * @param type $id
+	 * @param boolean $full
+	 * @return OSM_Objects_Object 
 	 */
 	public function getObject($type, $id, $full = false) {
 
 		OSM_ZLog::debug(__METHOD__, 'type: ', $type, ', id: ', $id, ', full: ', ($full ? 'true' : 'false'));
 
-		if (!preg_match('/\d*/', $id))
+		if (!preg_match('/\d+/', $id))
 		{
 			throw new OSM_Exception('Invalid object Id');
 		}
@@ -242,115 +285,254 @@ class OSM_Api {
 
 		$relativeUrl = $type . '/' . $id . ($full ? '/full' : '' );
 
-		$result = $this->httpGet($relativeUrl);
+		$result = $this->_httpApi($relativeUrl, null, 'GET');
 
 		if ($this->_options['outputFolder'] != null)
 		{
-			file_put_contents($this->_options['outputFolder'] . DIRECTORY_SEPARATOR . __METHOD__ . '.' . $id . '.xml', $result);
+			file_put_contents( $this->_getOutputFilename(__METHOD__), $result);
 		}
 
 		if (OSM_ZLog::isDebug())
 			OSM_Zlog::debug(__METHOD__, print_r($result, true));
 
-		return $this->createObjectsfromXml($type, $result, $full);
-	}
-
-	/**
-	 * @param string $type OSM_Api::OBJTYPE_*
-	 * @param string $xmlStr
-	 * @param bool $fullObject
-	 * @return OSM_Objects_Object
-	 */
-	public function createObjectsfromXml($type, $xmlStr, $isfullObject) {
-
-		OSM_ZLog::debug(__METHOD__, 'type=', $type);
-
-		$object = null;
-		$xmlObj = simplexml_load_string($xmlStr);
+		//return $this->createObjectsfromXml($type, $result, $full);
+		$this->createObjectsfromXml($result);
 
 		switch ($type)
 		{
-			case OSM_Api::OBJTYPE_RELATION :
-				$relations = $xmlObj->xpath('/osm/relation');
-				if (count($relations) != 1)
-					throw new OSM_Exception('Only one relation should be present.');
-				$object = OSM_Objects_Relation::fromXmlObj($relations[0]);
-				$this->_relations[$object->getId()] = $object;
+			case self::OBJTYPE_RELATION:
+				return $this->_relations[$id];
 				break;
 
-			case OSM_Api::OBJTYPE_WAY :
-				$ways = $xmlObj->xpath('/osm/way');
-				if (count($ways) != 1)
-					throw new OSM_Exception('Only one way should be present.');
-				$object = OSM_Objects_Way::fromXmlObj($ways[0]);
-				$this->_ways[$object->getId()] = $object;
+			case self::OBJTYPE_WAY:
+				return $this->_ways[$id];
 				break;
 
-			case OSM_Api::OBJTYPE_NODE :
-				$nodes = $xmlObj->xpath('/osm/node');
-				if (count($nodes) != 1)
-					throw new OSM_Exception('Only one node should be present.');
-				$object = OSM_Objects_Node::fromXmlObj($nodes[0]);
-				$this->_nodes[$object->getId()] = $object;
+			case self::OBJTYPE_NODE:
+				return $this->_nodes[$id];
 				break;
-
-			default:
-				throw new OSM_Exception('Unknow OSM Object "' . $xmlObj->getName() . '"');
 		}
-
-		if ($isfullObject)
-		{
-			// Take all others object
-			$subobjects = $xmlObj->xpath('/osm/*');
-			foreach ($subobjects as $sobj)
-			{
-				if ($sobj->getName() == $type)
-					continue;
-				OSM_ZLog::debug(__METHOD__, 'subobjects type=', $sobj->getName());
-				switch ($sobj->getName())
-				{
-					case OSM_Api::OBJTYPE_WAY :
-						$w = OSM_Objects_Way::fromXmlObj($sobj);
-						$this->_ways[$w->getId()] = $w;
-						break;
-
-					case OSM_Api::OBJTYPE_NODE :
-						$n = OSM_Objects_Node::fromXmlObj($sobj);
-						$this->_nodes[$n->getId()] = $n;
-						break;
-
-					case 'note':
-					case 'meta':
-						break;
-
-					default:
-						throw new OSM_Exception('Object "' . $sobj->getName() . '" is not supported in subobjects (request full object)');
-				}
-			}
-		}
-
-		return $object;
 	}
 
 	/**
-	 * Returns all loaded objects.
-	 * @return array List of objects
+	 * Load or get a node by Id from loaded objects.
+	 * 
+	 * Use removeObject to force the reload of the object.
+	 * 
+	 * @param string $id
+	 * @return OSM_Objects_Node 
 	 */
-	public function getObjects() {
-		$result = array();
-		foreach ($this->_nodes as $node)
+	public function getNode($id) {
+		return $this->getObject(self::OBJTYPE_NODE, $id);
+	}
+
+	/**
+	 * Load or get a way by Id from loaded objects.
+	 * 
+	 * Use removeObject to force the reload of the object.
+	 * 
+	 * @param string $id
+	 * @param bool $full With its nodes (true) or not (false=default)
+	 * @return OSM_Objects_Way 
+	 */
+	public function getWay($id, $full = false) {
+		return $this->getObject(self::OBJTYPE_WAY, $id, $full);
+	}
+
+	/**
+	 * Load or get a relation by Id from loaded objects.
+	 * 
+	 * Use removeObject to force the reload of the object.
+	 * 
+	 * @param string $id The relation Id
+	 * @param bool $full true for loading all relation's members
+	 * @return OSM_Objects_Relation 
+	 */
+	public function getRelation($id, $full = false) {
+		return $this->getObject(self::OBJTYPE_RELATION, $id, $full);
+	}
+
+	/**
+	 * Create objects and fill objects tables from a xml document (string).
+	 * 
+	 * @param string $xmlStr
+	 */
+	public function createObjectsfromXml($xmlStr) {
+
+		OSM_ZLog::debug(__METHOD__);
+
+		$xmlObj = simplexml_load_string($xmlStr);
+
+		$this->_loadedXml[] = $xmlStr;
+
+		// Take all others object
+		$objects = $xmlObj->xpath('/osm/*');
+		foreach ($objects as $obj)
 		{
-			$result[] = $node;
+			OSM_ZLog::debug(__METHOD__, 'subobjects type=', $obj->getName());
+			switch ($obj->getName())
+			{
+				case self::OBJTYPE_RELATION :
+					$r = OSM_Objects_Relation::fromXmlObj($obj);
+					$this->_relations[$r->getId()] = $r;
+					break;
+
+				case self::OBJTYPE_WAY :
+					$w = OSM_Objects_Way::fromXmlObj($obj);
+					$this->_ways[$w->getId()] = $w;
+					break;
+
+				case self::OBJTYPE_NODE :
+					$n = OSM_Objects_Node::fromXmlObj($obj);
+					$this->_nodes[$n->getId()] = $n;
+					break;
+
+				case 'note':
+				case 'meta':
+					break;
+
+				default:
+					throw new OSM_Exception('Object "' . $obj->getName() . '" is not supported in subobjects (request full object)');
+			}
 		}
-		foreach ($this->_ways as $way)
+	}
+
+	public function hasObject($type, $id) {
+
+		switch ($type)
 		{
-			$result[] = $way;
+			case self::OBJTYPE_RELATION:
+				if (array_key_exists($id, $this->_relations))
+					return true;
+				break;
+
+			case self::OBJTYPE_WAY:
+				if (array_key_exists($id, $this->_ways))
+					return true;
+				break;
+
+			case self::OBJTYPE_NODE:
+				if (array_key_exists($id, $this->_nodes))
+					return true;
+				break;
+				
+			default:
+				throw new OSM_Exception('Unknow object type "' . $type . '"');
+
 		}
-		foreach ($this->_relations as $relation)
-		{
-			$result[] = $relation;
-		}
+		return false;
+	}
+
+	public function hasNode($id)
+	{
+		return $this->hasObject(self::OBJTYPE_NODE, $id);
+	}
+	public function hasWay($id)
+	{
+		return $this->hasObject(self::OBJTYPE_WAY, $id);
+	}
+	public function hasRelation($id)
+	{
+		return $this->hasObject(self::OBJTYPE_RELATION, $id);
+	}
+	
+	/**
+	 * Returns all loaded objects.
+	 * @return OSM_Objects_Object[] List of objects
+	 */
+	public function &getObjects() {
+
+		$result = array_merge(array_values($this->_relations), array_values($this->_ways), array_values($this->_nodes));
 		return $result;
+	}
+
+	/**
+	 * Returns all loaded relations
+	 * @return OSM_Objects_Relation[]
+	 */
+	public function getRelations() {
+		return array_values($this->_relations);
+	}
+
+	/**
+	 * Returns all loaded ways
+	 * @return OSM_Objects_Way[]
+	 */
+	public function getWays() {
+		return array_values($this->_ways);
+	}
+
+	/**
+	 * Returns all loaded nodes
+	 * @return OSM_Objects_Node[]
+	 */
+	public function getNodes() {
+		return array_values($this->_nodes);
+	}
+
+	/**
+	 * Returns all loaded objects which are matching tags attributes
+	 * 
+	 * @param array $searchTags is a array of Key=>Value.
+	 * @return OSM_Objects_Object[]
+	 */
+	public function &getObjectsByTags(array $searchTags) {
+
+		$results = array_merge(
+			$this->getRelationsByTags($searchTags), $this->getWaysByTags($searchTags), $this->getNodesByTags($searchTags)
+		);
+		return $results;
+	}
+
+	/**
+	 * Returns all loaded nodes which are matching tags attributes
+	 * 
+	 * @param array $tags is a array of Key=>Value.
+	 * @return OSM_Objects_Node[]
+	 */
+	public function &getRelationsByTags(array $searchTags) {
+
+		$results = array();
+		foreach ($this->_relations as $obj)
+		{
+			if ($obj->hasTags($searchTags))
+				$results[] = $obj;
+		}
+		return $results;
+	}
+
+	/**
+	 * Returns all loaded nodes which are matching tags attributes
+	 * 
+	 * @param array $tags is a array of Key=>Value.
+	 * @return OSM_Objects_Node[]
+	 */
+	public function &getWaysByTags(array $searchTags) {
+
+		$results = array();
+		foreach ($this->_ways as $obj)
+		{
+			if ($obj->hasTags($searchTags))
+				$results[] = $obj;
+		}
+		return $results;
+	}
+
+	/**
+	 * Returns all loaded nodes which are matching tags attributes
+	 * 
+	 * @param array $tags is a array of Key=>Value.
+	 * @return OSM_Objects_Node[]
+	 */
+	public function &getNodesByTags(array $searchTags) {
+
+		$results = array();
+		foreach ($this->_nodes as $obj)
+		{
+			if ($obj->hasTags($searchTags))
+				$results[] = $obj;
+		}
+		return $results;
 	}
 
 	/**
@@ -360,6 +542,7 @@ class OSM_Api {
 	 * @param int $id
 	 */
 	public function removeObject($type, $id) {
+		
 		switch ($type)
 		{
 			case self::OBJTYPE_RELATION:
@@ -383,49 +566,70 @@ class OSM_Api {
 		}
 	}
 
+	public function removeAllObjects()
+	{
+		$this->_relations = $this->_ways = $this->_nodes = array();
+	}
+
 	/**
-	 * Reverts all changes in a given OSM Object.
-	 * The implementation is not really effective, as the object is downloaded again.
+	 * Reload a given OSM Object into the objects collection.
+	 * 
+	 * It remove the object before.
+	 * 
 	 * @param string $type
 	 * @param int $id
+	 * @param bool $full
 	 * @return OSM_Objects_Object the reverted object
 	 */
-	public function revertObject($type, $id) {
+	public function reloadObject($type, $id, $full=false ) {
+		
 		$this->removeObject($type, $id);
-		return $this->getObject($type, $id);
+		return $this->getObject($type, $id, $full);
 	}
 
 	/**
-	 *
-	 * @param string $id
-	 * @return OSM_Objects_Node 
-	 */
-	public function getNode($id) {
-		return $this->getObject(self::OBJTYPE_NODE, $id);
-	}
-
-	/**
-	 * @param string $id
-	 * @param bool $full
-	 * @return OSM_Objects_Way 
-	 */
-	public function getWay($id, $full = false) {
-		return $this->getObject(self::OBJTYPE_WAY, $id, $full);
-	}
-
-	/**
-	 * Retrieve a relation by Id.
+	 * Retreive objects with the Overpass-Api and fill objects collection from result.
 	 * 
-	 * @param string $id The relation Id
-	 * @param bool $full true for loading all relation's members
-	 * @return OSM_Objects_Relation 
+	 * @param string $xmlQuery 
 	 */
-	public function getRelation($id, $full = false) {
-		return $this->getObject(self::OBJTYPE_RELATION, $id, $full);
+	public function queryOApi( $xmlQuery )
+	{
+		$postdata = http_build_query(array('data' => $xmlQuery));
+
+		$opts = array('http' =>
+			array(
+				'method' => 'POST',
+				'user_agent' => $this->_getUserAgent(),
+				'header' => 'Content-type: application/x-www-form-urlencoded',
+				'content' => $postdata
+			)
+		);
+		$context = stream_context_create($opts);
+
+		$this->_stats['requestCount']++;
+
+		$result = @file_get_contents($this->_options['oapi_url'], false, $context);
+		if ($result === false)
+		{
+			$e = error_get_last();
+			if( isset($http_response_header) )
+			{
+				throw new OSM_HttpException($http_response_header);
+			}
+			else
+			{
+				throw new OSM_HttpException( $e['message'] );
+			}
+		}
+
+		$this->_stats['loadedBytes'] += strlen($result);
+
+		$this->createObjectsfromXml($result);
 	}
 
 	/**
-	 *
+	 * Create and add a new node to the objects collection.
+	 * 
 	 * @param type $lat
 	 * @param type $lon
 	 * @param array $tags
@@ -438,13 +642,13 @@ class OSM_Api {
 		$node->setLon($lon);
 		if (is_array($tags))
 			$node->addTags($tags);
-		$node->setDirty();
 		$this->_nodes[$node->getId()] = $node;
 		return $node;
 	}
 
 	/**
-	 *
+	 * Create and add a new way to the objects collection.
+	 * 
 	 * @param array $nodes
 	 * @param array $tags
 	 * @return OSM_Objects_Way 
@@ -456,15 +660,15 @@ class OSM_Api {
 			$way->addNodes($nodes);
 		if (is_array($tags))
 			$way->addTags($tags);
-		$way->setDirty();
 		return $way;
 	}
 
 	/**
-	 *
+	 * Create and add a new relation to the objects collection.
+	 * 
 	 * @param array $members
 	 * @param array $tags
-	 * @return OSM_Objects_Relation 
+	 * @return OSM_Objects_Relation
 	 */
 	public function addNewRelation(array $members=null, array $tags=null) {
 
@@ -473,7 +677,6 @@ class OSM_Api {
 			$relation->addMembers($members);
 		if (is_array($tags))
 			$relation->addTags($tags);
-		$relation->setDirty();
 		return $relation;
 	}
 
@@ -493,7 +696,7 @@ class OSM_Api {
 		}
 		else
 		{
-			$result = $this->httpPut($relativeUrl, OSM_Objects_ChangeSet::getCreateXmlStr($comment,$this->getUserAgent()));
+			$result = $this->_httpApi($relativeUrl, OSM_Objects_ChangeSet::getCreateXmlStr($comment, $this->_getUserAgent()), 'PUT');
 		}
 
 		OSM_ZLog::debug(__METHOD__, var_export($result, true));
@@ -501,7 +704,7 @@ class OSM_Api {
 		$changeSet = new OSM_Objects_ChangeSet($result);
 		return $changeSet;
 	}
-	
+
 	protected function _closeChangeSet($changeSet) {
 
 		$relativeUrl = 'changeset/' . $changeSet->getId() . '/close';
@@ -512,7 +715,7 @@ class OSM_Api {
 		}
 		else
 		{
-			$result = $this->httpPut($relativeUrl);
+			$result = $this->_httpApi($relativeUrl, null, 'PUT');
 		}
 	}
 
@@ -520,7 +723,7 @@ class OSM_Api {
 
 		$relativeUrl = 'changeset/' . $changeSet->getId() . '/upload';
 
-		$xmlStr = $changeSet->getUploadXmlStr($this->getUserAgent());
+		$xmlStr = $changeSet->getUploadXmlStr($this->_getUserAgent());
 
 		if (OSM_ZLog::isDebug())
 			file_put_contents('debug.OSM_Api._uploadChangeSet.postdata.xml', $xmlStr);
@@ -529,21 +732,30 @@ class OSM_Api {
 		{
 			if ($this->_options['outputFolder'] != null)
 			{
-				file_put_contents($this->_options['outputFolder'] . DIRECTORY_SEPARATOR . __CLASS__ . '.simulation_uploadChangeSet_' . time() . '.xml', $xmlStr);
+				file_put_contents( $this->_getOutputFilename(__METHOD__), $xmlStr);
 			}
 			$result = 'Simulation, no call to Api';
 		}
 		else
 		{
-			$result = $this->httpPost($relativeUrl, $xmlStr);
+			$result = $this->_httpApi($relativeUrl, $xmlStr, 'POST');
 		}
 
 		OSM_ZLog::debug(__METHOD__, print_r($result, true));
 	}
 
+	/**
+	 * Save changes made to objects.
+	 * 
+	 * Objects stay dirties after save. You have to destroy/reload them to get them up-to-date (id, version, ...)
+	 * 
+	 * @param type $comment
+	 * @return bool true if has saved something, false if nothing to save.
+	 */
 	public function saveChanges($comment) {
 
 		OSM_ZLog::notice(__METHOD__, 'comment = "', $comment, '"');
+
 		if ($this->_options['simulation'])
 		{
 			OSM_ZLog::notice(__METHOD__, 'Simulation Mode, not saving' . ($this->_options['outputFolder'] != null ? ' but look inside folder ' . $this->_options['outputFolder'] : ''));
@@ -685,7 +897,7 @@ class OSM_Api {
 	 */
 	public function getRelationWaysOrdered(OSM_Objects_Relation $relation) {
 
-		$membersWays = $relation->getMembersByType(OSM_Api::OBJTYPE_WAY);
+		$membersWays = $relation->findMembersByType(self::OBJTYPE_WAY);
 
 		$w1 = $membersWays[0];
 		if (!array_key_exists($w1->getRef(), $this->_ways))
@@ -740,28 +952,45 @@ class OSM_Api {
 		return $waysOrdered;
 	}
 	
+	public function getStatsRequestCount() {
+		return $this->_stats['requestCount'];
+	}
+
+	public function getStatsLoadedBytes() {
+		return $this->_stats['loadedBytes'];
+	}
+
 	/**
 	 * Return a string like "MyApp / Yapafo 0.1", based on the "appName" options and the library constants.
 	 * This appears as the editor's name in the changeset properties (key "crated_by") 
 	 * @return string user agent string
 	 */
-	protected function getUserAgent()
-	{
+	protected function _getUserAgent() {
 		$userAgent = "";
-		if($this->_options['appName'] != "")
+		if ($this->_options['appName'] != "")
 		{
 			$userAgent .= $this->_options['appName'] . ' / ';
 		}
 		$userAgent .= self::USER_AGENT . ' ' . self::VERSION;
 		return $userAgent;
 	}
-	
+
+	protected function _getOutputFilename($methodName )
+	{
+		return $this->_options['outputFolder'] .
+			DIRECTORY_SEPARATOR .__CLASS__
+			.'_'.sprintf('%04d',++$this->_outputWriteCount).'-'.time()
+			.'_'. $methodName . '.xml' ;
+	}
+
 	/**
-	 * 
+	 * Get an OpenStreetMap XML document suitable for use in JOSM and Merkaartor.
+	 * Only modified objects are represented, so that the user may reiew and send the changes with an OpenStreetMap editor.
+	 * @return string xml document string
 	 */
 	public function getXMLDocument()
 	{
-		$xml = '<osm version="0.6" upload="true" generator="'.$this->getUserAgent().'">';
+		$xml = '<osm version="0.6" upload="true" generator="'.$this->_getUserAgent().'">';
 		$objects = $this->_relations + $this->_ways + $this->_nodes;
 		foreach ($objects as $obj)
 		{

@@ -40,5 +40,15 @@ class Conf
 	 * @var array<string=>string>
 	 */
 	public static $NAME_FIELDS = array("old_name"=>"Old name","alt_name"=>"Alternative name","official_name"=>"Official name","loc_name"=>"Local name");
+	/**
+	 * Identifying number for Nomino on api.openstreetmap.org
+	 * @var string
+	 */
+	const OAUTH_CONSUMER_KEY = "eEn7SBt1FBIF9TfT1o9T63OAcgm8O4A48WFoEMbX";
+	/**
+	 * Oauth application secret
+	 * @var string
+	 */
+	const OAUTH_CONSUMER_SECRET = "UfbdRaMeUgf3rqiqocDEN6Z1F6GXexlCrj8WKF7q";
 }
 ?>

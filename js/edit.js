@@ -19,7 +19,10 @@ function setChangeEvents()
 	$(".name_edit").autocomplete("destroy");
 	var proposedNames = [];
 	$(".name_edit").each(function(){
-		proposedNames.push($(this).val());
+		if(proposedNames.indexOf($(this).val()) == -1)
+		{
+			proposedNames.push($(this).val());
+		}
 	});
 	$(".name_edit").autocomplete({source:proposedNames});
 }

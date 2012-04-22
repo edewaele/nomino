@@ -75,7 +75,7 @@ class OSM_Objects_ChangeSet {
 		$xmlStr = "<?xml version='1.0' encoding=\"UTF-8\"?>\n" .
 			'<osm version="0.6" generator="' . $generator . '">'
 			. "<changeset id='0' open='false'>"
-			. '<tag k="created_by" v="' . $generator . '/0.1"/>'
+			. '<tag k="created_by" v="' . $generator . '"/>'
 			. '<tag k="comment" v="' . str_replace('"', '\'', $comment) . '"/>'
 			. '</changeset></osm>';
 		return $xmlStr;

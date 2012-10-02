@@ -41,7 +41,9 @@ function search_for_places(address)
 			layer_find_places.addFeatures(markers);
 			map_find_places.zoomToExtent(layer_find_places.getDataExtent());
 		},
-		error: function(){alert('Error while loading places');}
+		error: function(){
+			alert('Error while loading places');
+		}
     });
 }
 
@@ -112,8 +114,10 @@ function search_for_position(lon,lat)
 				}
 			});
 			
-			$( "#waitDialog" ).dialog('close');
+			//$( "#waitDialog" ).dialog('close');
 		},
-		error: function(){alert('Error while loading places');}
+		error: function(){
+			alert('Error while loading places');
+		}
     });
 }

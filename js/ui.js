@@ -110,6 +110,7 @@ $(function() {
 			$( "#waitDialog" ).dialog('open');
 			var ll = MToLonLat(map_find_places.getLonLatFromPixel(e.xy));
 			search_for_position(ll.lon,ll.lat);
+			$('#waitDialog').dialog('close');
 		}
 	}});
 	map_find_places.addControl(oClick);

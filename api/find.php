@@ -71,4 +71,3 @@ else if(isset($_GET["lon"]) && isset($_GET["lat"]))
 	echo 'Error: ' . $e->getMessage();
 	}
 }
-?>

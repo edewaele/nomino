@@ -42,27 +42,27 @@ include("lib/OSM/Api.php");
 <script src="js/edit.js"></script>
 <script src="js/changeset.js"></script>
 <?php 
-$langCodeJS = "";
-foreach(Conf::$LANGUAGE_CODES as $k => $v){
-	$langCodeJS .= ($langCodeJS==""?"":",") . "'$k':'$v'";
-}
-$altNames = "";
-foreach(Conf::$NAME_FIELDS as $k => $v){
-	$altNames .= ($altNames==""?"":",") . "'$k':'$v'";
-}
+	$langCodeJS = "";
+	foreach(Conf::$LANGUAGE_CODES as $k => $v){
+		$langCodeJS .= ($langCodeJS==""?"":",") . "'$k':'$v'";
+	}
+	$altNames = "";
+	foreach(Conf::$NAME_FIELDS as $k => $v){
+		$altNames .= ($altNames==""?"":",") . "'$k':'$v'";
+	}
 ?> 
 <script type="text/javascript">
-var LANGUAGE_CODES = {<?php echo $langCodeJS;?>};
-var NAME_FIELDS = {<?php echo $altNames;?>};
-var ISO639 = [];
-for(var code in LANGUAGE_CODES)ISO639.push(code);
+	var LANGUAGE_CODES = {<?php echo $langCodeJS;?>};
+	var NAME_FIELDS = {<?php echo $altNames;?>};
+	var ISO639 = [];
+	for(var code in LANGUAGE_CODES)ISO639.push(code);
 </script>
 <?php if(isset($_GET["osm_type"]) && isset($_GET["osm_id"])){?>
-<script>
-$(function(){
-	beginEdit('<?php echo $_GET["osm_type"]?>','<?php echo $_GET["osm_id"]?>');
-});
-</script>
+	<script>
+		$(function(){
+			beginEdit('<?php echo $_GET["osm_type"]?>','<?php echo $_GET["osm_id"]?>');
+		});
+	</script>
 <?php }?>
 </head>
 <body>
@@ -96,7 +96,7 @@ $(function(){
 			<li><a href="#tabs-3">View changes</a></li>
 			<li><a href="#tabs-4">Documentation</a></li>
 		</ul>
-		<div id="tabs-1">
+		<div id="tabs-1"><!-- Find places -->
 			<div id="radio_find_mode">
 				<input type="radio" id="radio_find_mode1" name="radio" checked="checked" /><label for="radio_find_mode1">Find by name</label>
 				<input type="radio" id="radio_find_mode2" name="radio"/><label for="radio_find_mode2">OSM Object</label>
@@ -122,7 +122,7 @@ $(function(){
 				</form>
 			</div>
 		</div>
-		<div id="tabs-2">
+		<div id="tabs-2"><!-- Translate -->
 			<form name="editNames" action="javascript:saveObject()">
 				<h3>Names <input type="submit" value="Save" id="button_save_edit"></h3>
 				<table id="table_names">
@@ -148,7 +148,7 @@ $(function(){
 				</table>
 			</form>
 		</div>
-		<div id="tabs-3">
+		<div id="tabs-3"><!-- View changes -->
 			<h3>Changes 
 			<input type="submit" value="Submit changes" id="button_submit_changes" class="changesetButton" disabled="disabled" onclick="submitChanges()">
 			<input type="submit" value="Download OSM file" id="button_download_changes" class="changesetButton" disabled="disabled" onclick="downloadOsmFile()">
@@ -157,7 +157,7 @@ $(function(){
 			<ul></ul>
 			</div>
 		</div>
-		<div id="tabs-4">
+		<div id="tabs-4"><!-- Documentation -->
 			<p>Nomino is a specialised OpenStreetMap editor, intended to translated place names.</p>
 			<p>Unlike JOSM and others, Nomino is not designed to edit everything in OpenStreetMap.
 			Instead, it provides a simpler interface, usable by beginner contributors.</p>

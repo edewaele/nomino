@@ -1,16 +1,16 @@
 <?php
-include("../conf.php");
-include("KMLDocument.php");
+include('../conf.php');
+include('KMLDocument.php');
 require_once 'HTTP/Request2.php';
 /**
  * Find places through the Nominatim API
  */
-if(isset($_GET["q"]))
+if(isset($_GET['q']))
 {
 	// send a request to Nominatim
-	$request = new HTTP_Request2(Conf::NOMINATIM_API."search",HTTP_Request2::METHOD_GET) ;
+	$request = new HTTP_Request2(Conf::NOMINATIM_API.'search',HTTP_Request2::METHOD_GET) ;
 	$request->getUrl()->setQueryVariables(array(
-			'q' => $_GET["q"],
+			'q' => $_GET['q'],
 			'limit'=>Conf::NOMINATIM_NB_RESULTS,
 			'polygon'=>0, // do not describe the whole geometry
 			'format'=>'xml'// a web page is returned by default
@@ -21,7 +21,7 @@ if(isset($_GET["q"]))
 			// XML DOM Handler
 			$dom = new DomDocument();
 			$dom->loadXML($response->getBody());
-			$resultsList = $dom->getElementsByTagName("place");
+			$resultsList = $dom->getElementsByTagName('place');
 			
 			// KML response 
 			$kml = new KMLDocument();
@@ -30,14 +30,14 @@ if(isset($_GET["q"]))
 			for($i = 0; $i < $resultsList->length; $i++)
 			{
 				$place = $resultsList->item($i);
-				$kml->addPoint($place->getAttribute("lon"),$place->getAttribute("lat"),array(
-						"name" => $place->getAttribute("display_name"),
-						"styleURL" => "#".$place->getAttribute("type"),
-						"osm_id" => $place->getAttribute("osm_id"),
-						"osm_type" => $place->getAttribute("osm_type"),
-						"icon" => $place->getAttribute("icon"),
-						"class" => $place->getAttribute("class"),
-						"type" => $place->getAttribute("type")
+				$kml->addPoint($place->getAttribute('lon'),$place->getAttribute('lat'),array(
+						'name' => $place->getAttribute('display_name'),
+						'styleURL' => "#".$place->getAttribute('type'),
+						'osm_id' => $place->getAttribute('osm_id'),
+						'osm_type' => $place->getAttribute('osm_type'),
+						'icon' => $place->getAttribute('icon'),
+						'class' => $place->getAttribute('class'),
+						'type' => $place->getAttribute('type')
 				));
 			}
 			
@@ -55,10 +55,10 @@ if(isset($_GET["q"]))
 else if(isset($_GET["lon"]) && isset($_GET["lat"]))
 {
 	// send a request to Nominatim
-	$request = new HTTP_Request2(Conf::NOMINATIM_API."reverse",HTTP_Request2::METHOD_GET) ;
+	$request = new HTTP_Request2(Conf::NOMINATIM_API.'reverse',HTTP_Request2::METHOD_GET) ;
 	$request->getUrl()->setQueryVariables(array(
-			'lon' => $_GET["lon"],
-			'lat' => $_GET["lat"],
+			'lon' => $_GET['lon'],
+			'lat' => $_GET['lat'],
 			'format'=>'xml'// a web page is returned by default
 	));
 	try {

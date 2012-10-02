@@ -1,2 +1,10 @@
 Nomino
 
+Nomino is a place name internationalization application for OpenStreetMap. It provides a fancy UI for beginner users to translate OpenStreetMap place names. Using Nomino requires no specific knowledge in OpenStreetMap contribution.
+
+This application is currently in early development. You may test it on this website: http://nomino.comptoir.net/. It is not possible to submit changes yet.
+
+Thanks to Cyrille for his great library: https://github.com/Cyrille37/yapafo.
+
+Requires:
+- PHP Pear HTTP_Request2 (http://pear.php.net/package/HTTP_Request2)

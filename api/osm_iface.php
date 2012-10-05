@@ -1,5 +1,5 @@
 <?php
-include('../lib/OSM/Api.php');
+include('../lib/yapafo/lib/OSM/Api.php');
 include('../conf.php');
 session_start();
 

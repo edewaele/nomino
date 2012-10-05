@@ -1,6 +1,6 @@
 <?php 
 include("conf.php");
-include("lib/OSM/Api.php");
+include("lib/yapafo/lib/OSM/Api.php");
 
 // osm api handler is instantiated if necessary
 // if(!isset($_SESSION["api"]))

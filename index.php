@@ -55,7 +55,7 @@ if(isset($_REQUEST["oauth_token"]))
 	{
 		if ($ex->getHttpCode() == '401')
 		{
-			$api->clearCachedAuthPermissions();
+			$osmApi->clearCachedAuthPermissions();
 			$req = $oauth->requestAuthorizationUrl();
 			header('Location:' . $req['url']);
 			exit();

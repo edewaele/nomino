@@ -8,29 +8,62 @@
 require_once("conf.php");
 require_once("lib/yapafo/lib/OSM/Api.php");
 
-// osm api handler is instantiated if necessary
-// if(!isset($_SESSION["api"]))
-// {
-// 	$api = new OSM_Api(array('appName'=>Conf::APP_NAME,'url'=>OSM_Api::URL_PROD_UK));
-// 	$_SESSION["api"] = $api;
-// }
+session_start();
 
-// if(!isset($_SESSION["oauth"]))
-// {
-// 	$_SESSION["oauth"] = new OSM_Auth_OAuth(Conf::OAUTH_CONSUMER_KEY,Conf::OAUTH_CONSUMER_SECRET);
-// }
-// if(isset($_REQUEST["oauth_token"]))
-// {
-// 	$credentials = $_SESSION["oauth"]->requestAccessToken();
-// 	$_SESSION["oauth"]->setToken($credentials["token"],$credentials["tokenSecret"]);
-// 	$SESSION["api"]->setCredentials($_SESSION["oauth"]);
-// }
-// else if(!$_SESSION["oauth"]->hasToken())
-// {
-// 	$req = $_SESSION["oauth"]->requestAuthorizationUrl();
-// 	$_SESSION["oauth"]->setToken($req["token"],$req["tokenSecret"]);
-// 	header("Location:".$req["url"]);
-// }
+// osm api handler is instantiated if necessary
+if(!isset($_SESSION['api']))
+{
+	$_SESSION['api'] = new OSM_Api(array('appName'=>Conf::APP_NAME,'url'=>OSM_Api::URL_PROD_UK));
+}
+$osmApi = $_SESSION['api'] ;
+$oauth = $osmApi->getCredentials();
+if( ! $oauth )
+{
+ 	$oauth = new OSM_Auth_OAuth(
+		Conf::OAUTH_CONSUMER_KEY,
+		Conf::OAUTH_CONSUMER_SECRET
+		/*array('callback_url'=>'http://localhost/dev.www/Cartographie/OSM/nomino/')*/
+		);
+	$osmApi->setCredentials($oauth);
+}
+
+if(isset($_REQUEST["oauth_token"]))
+{
+	// Check that the callback is for us.
+	$creds = $oauth->getRequestToken();
+	if ($creds['token'] == $_REQUEST["oauth_token"])
+	{
+		$oauth->requestAccessToken(
+			isset($_REQUEST['oauth_verifier'])
+			? $_REQUEST['oauth_verifier']
+			: null
+			);
+	}
+	else
+	{
+		echo '<p>ERROR, oauth token does not match !</p>' . "\n";
+	}
+ }
+ else if(!$oauth->hasAccessToken())
+ {
+	try
+	{
+		// try to get a access token
+		$oauth->requestAccessToken();
+	}
+	catch (OSM_HttpException $ex)
+	{
+		if ($ex->getHttpCode() == '401')
+		{
+			$api->clearCachedAuthPermissions();
+			$req = $oauth->requestAuthorizationUrl();
+			header('Location:' . $req['url']);
+			exit();
+		}
+	}
+ }
+ 
+ 
 ?>
 <html>
 <head>

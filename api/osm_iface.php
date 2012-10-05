@@ -1,6 +1,12 @@
 <?php
-include('../lib/yapafo/lib/OSM/Api.php');
-include('../conf.php');
+/**
+ * Manage user actions on data.
+ * @author manud https://gitorious.org/~manud
+ */
+
+require_once('../lib/yapafo/lib/OSM/Api.php');
+require_once('../conf.php');
+
 session_start();
 
 // osm api handler is instantiated if necessary

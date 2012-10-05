@@ -1,7 +1,13 @@
 <?php
-include('../conf.php');
-include('KMLDocument.php');
-require_once 'HTTP/Request2.php';
+/**
+ * Find places through the Nominatim API.
+ * @author manud https://gitorious.org/~manud
+ */
+
+require_once('../conf.php');
+require_once('KMLDocument.php');
+require_once('HTTP/Request2.php');
+
 /**
  * Find places through the Nominatim API
  */

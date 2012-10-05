@@ -1,7 +1,7 @@
 <?php
 /**
- * KML Document generator, it can construct a KML document with geolocated points
- * @author manu
+ * KML Document generator, it can construct a KML document with geolocated points.
+ * @author manud https://gitorious.org/~manud
  */
 class KMLDocument{
 	/**

@@ -1,4 +1,10 @@
 <?php 
+/**
+ * Nomino is a place name internationalization application for OpenStreetMap.
+ * Here is the main file.
+ * @author manud https://gitorious.org/~manud
+ */
+
 require_once("conf.php");
 require_once("lib/yapafo/lib/OSM/Api.php");
 

@@ -1,0 +1,3 @@
+[submodule "lib/OSM"]
+	path = lib/OSM
+	url = git://github.com/Cyrille37/yapafo.git

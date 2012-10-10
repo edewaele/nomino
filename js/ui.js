@@ -39,12 +39,14 @@ OpenLayers.Layer.OSM.Toolserver = OpenLayers.Class(OpenLayers.Layer.OSM, {
 	
 	initialize: function(name, options) {
 		var url = [
-			"http://a.www.toolserver.org/tiles/" + name + "/${z}/${x}/${y}.png", 
-			"http://b.www.toolserver.org/tiles/" + name + "/${z}/${x}/${y}.png", 
-			"http://c.www.toolserver.org/tiles/" + name + "/${z}/${x}/${y}.png"
+		"http://a.www.toolserver.org/tiles/" + name + "/${z}/${x}/${y}.png", 
+		"http://b.www.toolserver.org/tiles/" + name + "/${z}/${x}/${y}.png", 
+		"http://c.www.toolserver.org/tiles/" + name + "/${z}/${x}/${y}.png"
 		];
 		
-		options = OpenLayers.Util.extend({numZoomLevels: 18}, options);
+		options = OpenLayers.Util.extend({
+			numZoomLevels: 18
+		}, options);
 		OpenLayers.Layer.OSM.prototype.initialize.apply(this, [name, url, options]);
 	},
 	
@@ -52,8 +54,11 @@ OpenLayers.Layer.OSM.Toolserver = OpenLayers.Class(OpenLayers.Layer.OSM, {
 });
 
 $(function() {
+	
 	$( "#tabs" ).tabs({
-		show: function(event, ui){if(ui.index == 2)loadChangeset();}
+		show: function(event, ui){
+			if(ui.index == 2)loadChangeset();
+		}
 	});
 	$("#tabs").tabs("disable",1);
 	
@@ -65,54 +70,57 @@ $(function() {
 		units:'m',
 		projection: new OpenLayers.Projection("EPSG:900913"),
 		displayProjection: new OpenLayers.Projection("EPSG:4326"),
-	       controls:[
-   					new OpenLayers.Control.Navigation(),
-					new OpenLayers.Control.PanZoom()
-			  ]
+		controls:[
+		new OpenLayers.Control.Navigation(),
+		new OpenLayers.Control.PanZoom()
+		]
 	});
 	
 
 	// Get control of the right-click event:
 	document.getElementById('map_find_places').oncontextmenu = function(e){
-		 e = e?e:window.event;
-		 if (e.preventDefault) e.preventDefault(); // For non-IE browsers.
-		 else return false; // For IE browsers.
+		e = e?e:window.event;
+		if (e.preventDefault) e.preventDefault(); // For non-IE browsers.
+		else return false; // For IE browsers.
 	};
 
 	// A control class for capturing click events...
 	OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {                
 		defaultHandlerOptions: {
-		'single': true,
-		'double': true,
-		'pixelTolerance': 0,
-		'stopSingle': false,
-		'stopDouble': false
+			'single': true,
+			'double': true,
+			'pixelTolerance': 0,
+			'stopSingle': false,
+			'stopDouble': false
 		},
 		handleRightClicks:true,
 		initialize: function(options) {
-		this.handlerOptions = OpenLayers.Util.extend(
-		{}, this.defaultHandlerOptions
-		);
-		OpenLayers.Control.prototype.initialize.apply(
-		this, arguments
-		); 
-		this.handler = new OpenLayers.Handler.Click(
-		this, this.eventMethods, this.handlerOptions
-		);
+			this.handlerOptions = OpenLayers.Util.extend(
+			{}, this.defaultHandlerOptions
+				);
+			OpenLayers.Control.prototype.initialize.apply(
+				this, arguments
+				); 
+			this.handler = new OpenLayers.Handler.Click(
+				this, this.eventMethods, this.handlerOptions
+				);
 		},
 		CLASS_NAME: "OpenLayers.Control.Click"
 	});
 
 
 	// Add an instance of the Click control that listens to various click events:
-	var oClick = new OpenLayers.Control.Click({eventMethods:{
-		'rightclick': function(e) {
-			$( "#waitDialog" ).dialog('open');
-			var ll = MToLonLat(map_find_places.getLonLatFromPixel(e.xy));
-			search_for_position(ll.lon,ll.lat);
-			$('#waitDialog').dialog('close');
+	var oClick = new OpenLayers.Control.Click({
+		eventMethods:{
+			'rightclick': function(e) {
+				$( "#waitDialog" ).dialog('open');
+				var ll = MToLonLat(map_find_places.getLonLatFromPixel(e.xy));
+				search_for_position(ll.lon,ll.lat);
+				$('#waitDialog').dialog('close');
+			}
 		}
-	}});
+	});
+	
 	map_find_places.addControl(oClick);
 	oClick.activate();
 	
@@ -122,7 +130,9 @@ $(function() {
 	layerNoLabels = new OpenLayers.Layer.OSM.Toolserver('osm-no-labels');
 	map_find_places.addLayer(layerNoLabels);
 	
-	layerLang = new OpenLayers.Layer.OSM.Toolserver('osm-labels-en',{isBaseLayer:false});
+	layerLang = new OpenLayers.Layer.OSM.Toolserver('osm-labels-en',{
+		isBaseLayer:false
+	});
 	map_find_places.addLayer(layerLang);
 	
 	updateMapDisplay();
@@ -135,29 +145,29 @@ $(function() {
 	
 	
 	layer_find_places.events.on({
-	      "featureselected": function(feature) {
-	    	  $("#list_find_places ul li").eq(feature.feature.attributes.numPlace).addClass("place_highlight");
-	      },
-	      "featureunselected": function(feature) {
-	        $("#list_find_places ul li").removeClass("place_highlight");
-	      }
-	    });
+		"featureselected": function(feature) {
+			$("#list_find_places ul li").eq(feature.feature.attributes.numPlace).addClass("place_highlight");
+		},
+		"featureunselected": function(feature) {
+			$("#list_find_places ul li").removeClass("place_highlight");
+		}
+	});
 
-    var selectControl = new OpenLayers.Control.SelectFeature(layer_find_places, {
-      multiple: false,
-      hover: true
-    });
-    map_find_places.addControl(selectControl);
-    selectControl.activate();
+	var selectControl = new OpenLayers.Control.SelectFeature(layer_find_places, {
+		multiple: false,
+		hover: true
+	});
+	map_find_places.addControl(selectControl);
+	selectControl.activate();
     
-    $("#button_find_places").button();
-    $("#button_save_edit").button();
-    $(".changesetButton").button();
+	$("#button_find_places").button();
+	$("#button_save_edit").button();
+	$(".changesetButton").button();
     
-    $( "#progressbar" ).progressbar({
+	$( "#progressbar" ).progressbar({
 		value: 100
 	});
-    $( "#waitDialog" ).dialog({
+	$( "#waitDialog" ).dialog({
 		height: 50,
 		modal: true,
 		resizable:false,
@@ -166,12 +176,18 @@ $(function() {
 		dialogClass:'noTitle'
 	});
     
-    $("#radio_find_mode").buttonset();
-    $("#radio_find_mode1").click(function(){$("#find_mode_1").show();$("#find_mode_2").hide();});
-    $("#radio_find_mode2").click(function(){$("#find_mode_2").show();$("#find_mode_1").hide();});
+	$("#radio_find_mode").buttonset();
+	$("#radio_find_mode1").click(function(){
+		$("#find_mode_1").show();
+		$("#find_mode_2").hide();
+	});
+	$("#radio_find_mode2").click(function(){
+		$("#find_mode_2").show();
+		$("#find_mode_1").hide();
+	});
     
 
-    $( "#preferencesDialog" ).dialog({
+	$( "#preferencesDialog" ).dialog({
 		height: 350,
 		width:500,
 		modal: true,
@@ -188,27 +204,30 @@ $(function() {
 			}
 		}
 	});
-    $("input[name='mapLayer']").change(function(){
-    	if($("input[name='mapLayer']:checked").attr("id") == "radioPrefToolserver")
-    		$("#selectPrefMapLang").removeAttr("disabled");
-    	else 
-    		$("#selectPrefMapLang").attr("disabled","disabled");
-    });
-    $("#checkPrefAutoTrans").click(function(){
-    	if($("#checkPrefAutoTrans").attr("checked") == "checked")
-    		$("#textPrefLanguage").removeAttr("disabled");
-    	else 
-    		$("#textPrefLanguage").attr("disabled","disabled");
-    });
-    $("#textPrefLanguage").autocomplete({source:ISO639});
+	$("input[name='mapLayer']").change(function(){
+		if($("input[name='mapLayer']:checked").attr("id") == "radioPrefToolserver")
+			$("#selectPrefMapLang").removeAttr("disabled");
+		else 
+			$("#selectPrefMapLang").attr("disabled","disabled");
+	});
+	$("#checkPrefAutoTrans").click(function(){
+		if($("#checkPrefAutoTrans").attr("checked") == "checked")
+			$("#textPrefLanguage").removeAttr("disabled");
+		else 
+			$("#textPrefLanguage").attr("disabled","disabled");
+	});
+	$("#textPrefLanguage").autocomplete({
+		source:ISO639
+	});
     
-    
-    $("#tabs .ui-tabs-nav").append('<a href="javascript:showPreferences()" style="float:right"><img src="img/prefs.png"> Preferences<a>');
-    
+	// remove html from javascript and put it into html part
+	$("#tabs .ui-tabs-nav").append( $('#tabNavButtons').show() );
+
 //    $("#list_find_places ul li").hover(
 //    		function(){$(this).addClass("place_highlight");},
 //    		function(){$(this).removeClass("place_highlight");}
 //    );
+
 });
 
 /**

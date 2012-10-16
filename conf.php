@@ -56,4 +56,3 @@ class Conf
 	 */
 	const OAUTH_CONSUMER_SECRET = 'UfbdRaMeUgf3rqiqocDEN6Z1F6GXexlCrj8WKF7q';
 }
-?>

@@ -204,6 +204,7 @@ $(function() {
 			}
 		}
 	});
+	
 	$("input[name='mapLayer']").change(function(){
 		if($("input[name='mapLayer']:checked").attr("id") == "radioPrefToolserver")
 			$("#selectPrefMapLang").removeAttr("disabled");
@@ -294,4 +295,38 @@ function updateMapDisplay()
 		layerLang.url = "http://a.www.toolserver.org/tiles/osm-labels-"+$.cookie("map")+"/${z}/${x}/${y}.png";
 		layerLang.redraw();
 	}
+}
+
+function osmAuth()
+{
+	url = 'api/osm_iface.php?action=osmOAuth' ;
+
+	$('#authDialog').dialog({
+		height: 350,
+		width:500,
+		modal: true,
+		resizable:false,
+		autoOpen:true,
+		closeOnEscape:true,
+		// add a close listener to prevent adding multiple divs to the document
+		close: function(event, ui) {
+		// remove div with all data and events
+		//$(this).remove();
+		},
+		buttons: [
+		{
+			text: "Cancel",
+			click: function() {
+				$(this).dialog("close");
+			}
+		},
+		{
+			text: "Go to authenticate",
+			click: function() {
+				window.location = url ;
+			}
+		}
+		]
+	});
+
 }

@@ -4,66 +4,19 @@
  * Here is the main file.
  * @author manud https://gitorious.org/~manud
  */
-require_once("conf.php");
-require_once("lib/yapafo/lib/OSM/Api.php");
 
-session_start();
+require_once('conf.php');
+require_once('common.inc.php');
 
-// osm api handler is instantiated if necessary
-if (!isset($_SESSION['api']))
+require_once('osmApi.inc.php');
+
+try{
+	$user = $osmApi->getUserDetails();
+}catch( OSM_Exception $e)
 {
-	$_SESSION['api'] = new OSM_Api(array('appName' => Conf::APP_NAME, 'url' => OSM_Api::URL_PROD_UK));
+	$user = null ;
 }
-$osmApi = $_SESSION['api'];
-$oauth = $osmApi->getCredentials();
 
-/*
-  if( ! $oauth )
-  {
-  $oauth = new OSM_Auth_OAuth(
-  Conf::OAUTH_CONSUMER_KEY,
-  Conf::OAUTH_CONSUMER_SECRET
-  //array('callback_url'=>'http://localhost/dev.www/Cartographie/OSM/nomino/')
-  );
-  $osmApi->setCredentials($oauth);
-  }
-
-  if(isset($_REQUEST["oauth_token"]))
-  {
-  // Check that the callback is for us.
-  $creds = $oauth->getRequestToken();
-  if ($creds['token'] == $_REQUEST["oauth_token"])
-  {
-  $oauth->requestAccessToken(
-  isset($_REQUEST['oauth_verifier'])
-  ? $_REQUEST['oauth_verifier']
-  : null
-  );
-  }
-  else
-  {
-  echo '<p>ERROR, oauth token does not match !</p>' . "\n";
-  }
-  }
-  else if(!$oauth->hasAccessToken())
-  {
-  try
-  {
-  // try to get a access token
-  $oauth->requestAccessToken();
-  }
-  catch (OSM_HttpException $ex)
-  {
-  if ($ex->getHttpCode() == '401')
-  {
-  $osmApi->clearCachedAuthPermissions();
-  $req = $oauth->requestAuthorizationUrl();
-  header('Location:' . $req['url']);
-  exit();
-  }
-  }
-  }
- */
 ?>
 <html>
 	<head>
@@ -80,18 +33,18 @@ $oauth = $osmApi->getCredentials();
 		<script src="js/find_places.js"></script>
 		<script src="js/edit.js"></script>
 		<script src="js/changeset.js"></script>
-<?php
-$langCodeJS = "";
-foreach (Conf::$LANGUAGE_CODES as $k => $v)
-{
-	$langCodeJS .= ($langCodeJS == "" ? "" : ",") . "'$k':'$v'";
-}
-$altNames = "";
-foreach (Conf::$NAME_FIELDS as $k => $v)
-{
-	$altNames .= ($altNames == "" ? "" : ",") . "'$k':'$v'";
-}
-?> 
+		<?php
+		$langCodeJS = "";
+		foreach (Conf::$LANGUAGE_CODES as $k => $v)
+		{
+			$langCodeJS .= ($langCodeJS == "" ? "" : ",") . "'$k':'$v'";
+		}
+		$altNames = "";
+		foreach (Conf::$NAME_FIELDS as $k => $v)
+		{
+			$altNames .= ($altNames == "" ? "" : ",") . "'$k':'$v'";
+		}
+		?> 
 		<script type="text/javascript">
 			var LANGUAGE_CODES = {<?php echo $langCodeJS; ?>};
 			var NAME_FIELDS = {<?php echo $altNames; ?>};
@@ -99,7 +52,8 @@ foreach (Conf::$NAME_FIELDS as $k => $v)
 			for(var code in LANGUAGE_CODES)ISO639.push(code);
 		</script>
 		<?php if (isset($_GET["osm_type"]) && isset($_GET["osm_id"]))
-		{ ?>
+		{
+			?>
 			<script>
 				$(function(){
 					beginEdit('<?php echo $_GET["osm_type"] ?>','<?php echo $_GET["osm_id"] ?>');
@@ -111,6 +65,10 @@ foreach (Conf::$NAME_FIELDS as $k => $v)
 
 		<!-- Dialogs -->
 		<div id="waitDialog" style="display: none"><div id="progressbar"></div></div>
+		<div id="authDialog" style="display: none">
+			<p>To save changes in OSM database you have to be authenticated at osm.org.</p>
+			<p>After authentification you'll be redirected back here.</p>
+		</div>
 		<div id="selectPlaceDialog" style="display: none"><form name="selectPlace"></form></div>
 		<div id="preferencesDialog" style="display:none" title="Preferences">
 			<form name="preferencesForm">
@@ -119,10 +77,12 @@ foreach (Conf::$NAME_FIELDS as $k => $v)
 					<input type="radio" id="radioPrefMapquest" name="mapLayer"> <label for="radioPrefMapquest">Mapquest</label>
 					<br><input type="radio" id="radioPrefToolserver" name="mapLayer"> 
 					<label for="radioPrefToolserver">Toolserver localised maps
-						<select id="selectPrefMapLang" disabled="disabled"><?php foreach (Conf::$TOOLSERVER_LANGUAGES as $lang)
+						<select id="selectPrefMapLang" disabled="disabled"><?php
+foreach (Conf::$TOOLSERVER_LANGUAGES as $lang)
 {
 	echo '<option value="' . $lang . '">' . $lang . (array_key_exists($lang, Conf::$LANGUAGE_CODES) ? (" (" . Conf::$LANGUAGE_CODES[$lang] . ")") : "") . '</option>';
-} ?></select></label></p>
+}
+?></select></label></p>
 				<h3>Preferred language</h3>
 				<p><input type="checkbox" id="checkPrefAutoTrans">
 					<label for="checkPrefAutoTrans">When editing a place, add automically a field for translating into this language</label>
@@ -130,12 +90,20 @@ foreach (Conf::$NAME_FIELDS as $k => $v)
 			</form>
 		</div>
 		<div id="tabNavButtons" style="display:none" title="TabNavButtons">
+
+			<?php
+			if( $user == null ){
+				?>unauth<?php
+			}else{
+				echo $user->getName();
+			}
+			?>
+			<a href="javascript:osmAuth()" style="float:right"> osm auth</a>
 			<a href="javascript:showPreferences()" style="float:right"><img src="img/prefs.png"/> Preferences</a>
 		</div>
 
 		<div id="mainContainer">
-			<div id="appTitle">OpenStreetMap Nomino<span id="subtitle1">(verb, latin)</span> <span id="subtitle2">I name</span>
-<?php// 	echo $_SESSION["api"]->getUserDetails()->getName(); ?></div>
+			<div id="appTitle">OpenStreetMap Nomino<span id="subtitle1">(verb, latin)</span> <span id="subtitle2">I name</span></div>
 			<div id="tabs">
 				<ul>
 					<li><a href="#tabs-1">Find Places</a></li>
@@ -178,7 +146,8 @@ foreach (Conf::$NAME_FIELDS as $k => $v)
 								<td><input type="text" id="edit_name" class="name_edit" name="name"></td>
 							</tr>
 <?php foreach (Conf::$NAME_FIELDS as $key => $label)
-{ ?>
+{
+	?>
 								<tr id="row_edit_<?php echo $key; ?>">
 									<td><?php echo $label; ?></td>
 									<td><input type="text" id="edit_<?php echo $key; ?>" class="name_edit" name="<?php echo $key; ?>"></td>
@@ -188,7 +157,8 @@ foreach (Conf::$NAME_FIELDS as $k => $v)
 										</table>
 										<p id="link_add_tr"><a href="javascript:addLine()"><img src="img/add.png"> Add translation</a>
 <?php foreach (Conf::$NAME_FIELDS as $key => $label)
-{ ?>
+{
+	?>
 												<a href="javascript:displayNameField('<?php echo $key; ?>','')" id="link_set_<?php echo $key; ?>"><img src="img/add.png"> Set <?php echo strtolower($label); ?></a>
 <?php } ?>
 										</p>

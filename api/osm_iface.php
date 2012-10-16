@@ -4,21 +4,9 @@
  * Manage user actions on data.
  * @author manud https://gitorious.org/~manud
  */
-require_once('../lib/yapafo/lib/OSM/Api.php');
 require_once('../conf.php');
 
-session_start();
-
-// osm api handler is instantiated if necessary
-if (!isset($_SESSION['api']))
-{
-	$api = new OSM_Api(array('appName' => Conf::APP_NAME, 'url' => OSM_Api::URL_PROD_UK));
-	$_SESSION['api'] = $api;
-}
-else
-{
-	$api = $_SESSION['api'];
-}
+require_once( __DIR__ . '/../osmApi.inc.php');
 
 $action = isset($_REQUEST['action']) && trim($_REQUEST['action']) != '' ? $_REQUEST['action'] : null;
 
@@ -32,7 +20,7 @@ switch ($action)
 		{
 			try
 			{
-				$elt = $api->getObject($_GET['type'], $_GET['id']);
+				$elt = $osmApi->getObject($_GET['type'], $_GET['id']);
 				echo $elt->asXmlStr();
 			}
 			catch (Exception $e)
@@ -52,7 +40,7 @@ switch ($action)
 			try
 			{
 				// search for the object
-				$elt = $api->getObject($_GET['type'], $_GET['id']);
+				$elt = $osmApi->getObject($_GET['type'], $_GET['id']);
 
 				if ($elt == null)
 				{
@@ -116,7 +104,7 @@ switch ($action)
 		$dnode = $dom->createElement('Document');
 		$dom->appendChild($dnode);
 
-		$loadedObjects = $api->getObjects();
+		$loadedObjects = $osmApi->getObjects();
 
 		foreach ($loadedObjects as $osmObject)
 		{
@@ -165,7 +153,7 @@ switch ($action)
 	 */
 	case 'revert':
 
-		$api->removeObject($_GET['type'], $_GET['id']);
+		$osmApi->removeObject($_GET['type'], $_GET['id']);
 		echo 1;
 
 		break;
@@ -177,7 +165,7 @@ switch ($action)
 
 		header('Content-type: application/xml');
 		header('Content-Disposition: attachment; filename="places.osm"');
-		echo $api->getXMLDocument();
+		echo $osmApi->getXMLDocument();
 
 		break;
 
@@ -186,7 +174,7 @@ switch ($action)
 	 */
 	case 'save':
 		// TODO implement commits
-		echo $api->saveChanges(Conf::COMMIT_MESSAGE);
+		echo $osmApi->saveChanges(Conf::COMMIT_MESSAGE);
 
 		break;
 
@@ -194,6 +182,8 @@ switch ($action)
 	 * action "osmOAuth"
 	 */
 	case 'osmOAuth' :
+		
+		startOsmAuth();
 
 		break;
 
@@ -204,5 +194,6 @@ switch ($action)
 		echo 'Invalid request';
 
 		break;
-
 }
+
+	

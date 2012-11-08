@@ -276,6 +276,24 @@ function savePreferences()
 		$.cookie("prefLang","");
 	
 	updateMapDisplay();
+	
+	// save preferences in the OSM server
+	var keys = {'map':1,'prefLang':1}
+	for(var key in keys)
+	{
+		$.ajax({
+			dataType:'text',
+			url: "api/osm_iface.php",
+			data:{
+				'action':'savePref',
+				'k':key,
+				'v':$.cookie(key)
+			},
+			success: function(e){
+			},
+			error: function(e){alert('Error saving user preferences');}
+	    });
+	}
 }
 
 /**

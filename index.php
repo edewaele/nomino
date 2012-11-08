@@ -50,6 +50,14 @@ try{
 			var NAME_FIELDS = {<?php echo $altNames; ?>};
 			var ISO639 = [];
 			for(var code in LANGUAGE_CODES)ISO639.push(code);
+			<?php 
+				if($osmApi->getCredentials() != null && $osmApi->isAllowedToReadPrefs()){
+					foreach(Conf::$PREF_NAMES as $key){
+						$cookVal = "";
+						if(array_key_exists($key,$osmApi->getUserPreferences()))$cookVal = $osmApi->getUserPreferences()[$key];
+						echo '$.cookie("'.$key.'","'.$cookVal.'");';
+					}	 
+				}?>
 		</script>
 		<?php if (isset($_GET["osm_type"]) && isset($_GET["osm_id"]))
 		{
@@ -93,12 +101,11 @@ foreach (Conf::$TOOLSERVER_LANGUAGES as $lang)
 
 			<?php
 			if( $user == null ){
-				?>unauth<?php
+				?><a href="javascript:osmAuth()" style="float:right">Login with OSM</a><?php
 			}else{
-				echo $user->getName();
+				echo '<span style="float:right">'.$user->getName().'</span>';
 			}
 			?>
-			<a href="javascript:osmAuth()" style="float:right"> osm auth</a>
 			<a href="javascript:showPreferences()" style="float:right"><img src="img/prefs.png"/> Preferences</a>
 		</div>
 

@@ -34,7 +34,7 @@ function getOsmApi() {
 	// osm api handler is instantiated if necessary
 	if (!isset($_SESSION['api']))
 	{
-		$_SESSION['api'] = new OSM_Api(array('appName' => Conf::APP_NAME, 'url' => OSM_Api::URL_PROD_UK));
+		$_SESSION['api'] = new OSM_Api(array('appName' => Conf::APP_NAME, 'url' => OSM_Api::URL_PROD_UK, 'simulation' => false));
 	}
 	$osmApi = $_SESSION['api'];
 	$oauth = $osmApi->getCredentials();

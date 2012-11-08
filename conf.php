@@ -55,4 +55,9 @@ class Conf
 	 * @var string
 	 */
 	const OAUTH_CONSUMER_SECRET = 'UfbdRaMeUgf3rqiqocDEN6Z1F6GXexlCrj8WKF7q';
+	/**
+	 * Keys for user preferences
+	 * @var array of string
+	 */
+	public static $PREF_NAMES = array('map','prefLang');
 }

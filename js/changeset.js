@@ -58,8 +58,6 @@ function revertChange(type,id)
 
 function submitChanges()
 {
-	alert("Not implemented yet");
-	return;
 	$( "#waitDialog" ).dialog('open');
 	$.ajax({
 		dataType:'text',
@@ -69,7 +67,10 @@ function submitChanges()
 		},
 		success: function(e){
 			$( "#waitDialog" ).dialog('close');
-			alert("Changes saved");
+			if(e == 1)
+				alert("Changes saved ");
+			else
+				osmAuth();
 		},
 		error: function(e){alert('Error while retrieving OSM object');$( "#waitDialog" ).dialog('close');}
     });

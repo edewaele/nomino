@@ -174,8 +174,19 @@ switch ($action)
 	 */
 	case 'save':
 		// TODO implement commits
-		echo $osmApi->saveChanges(Conf::COMMIT_MESSAGE);
+		if($osmApi->isAllowedToWriteApi())
+			echo $osmApi->saveChanges(Conf::COMMIT_MESSAGE);
+		else 
+			echo 0;
 
+		break;
+		
+	/**
+	 * Save the preferences
+	 */
+	case 'savePref':
+		if(isset($_GET["k"]) && isset($_GET["v"]))
+			$osmApi->setUserPreference($_GET["k"], $_GET["v"]);
 		break;
 
 	/**

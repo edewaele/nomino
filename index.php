@@ -106,7 +106,8 @@ foreach (Conf::$TOOLSERVER_LANGUAGES as $lang)
 				echo '<span style="float:right">'.$user->getName().'</span>';
 			}
 			?>
-			<a href="javascript:showPreferences()" style="float:right"><img src="img/prefs.png"/> Preferences</a>
+			<a href="javascript:showPreferences()" style="float:right"> Preferences</a>
+			<a href="javascript:showPreferences()" style="float:right"><img src="img/prefs.png"/></a>
 		</div>
 
 		<div id="mainContainer">
@@ -184,9 +185,9 @@ foreach (Conf::$TOOLSERVER_LANGUAGES as $lang)
 											</div>
 										</div>
 										<div id="tabs-4"><!-- Documentation -->
-											<p>Nomino is a specialised OpenStreetMap editor, intended to translated place names.</p>
+											<p>Nomino is a specialised OpenStreetMap editor, intended to translate place names.</p>
 											<p>Unlike JOSM and others, Nomino is not designed to edit everything in OpenStreetMap.
-												Instead, it provides a simpler interface, usable by beginner contributors.</p>
+												Instead, it provides a simpler interface, especially designed to new contributors.</p>
 											<h2>Find places</h2>
 											<p>Nomino does not download OSM in a whole area, but you may search for a place to edit.</p>
 											<p>Just type a place name or an address to search, then click "Search", 
@@ -194,18 +195,20 @@ foreach (Conf::$TOOLSERVER_LANGUAGES as $lang)
 												By clicking a place name, you can edit the object.</p>
 											<p>If you prefer choosing places on the map, you may right-click somewhere on it.
 												The place you clicked is contained in a city, a county, a state, a country.
-												These territories are displayed in a list, choose one of these items to edit the city, the county, ...</p>
-											<p>It is possible to find an object by its number, knowing the object type (node, way, relation),
-												and its id. Cick "OSM Object" button, the select the object type and the object number, then click "Search" to open it.</p>
+												These entities are displayed in a list, choose one of these items to edit the city, the county, ...</p>
+											<p> You may open an OSM object given its number.
+											 Click "OSM Object" button, the select the object type and the object number, then click "Search" to open it.</p>
 											<h2>Translate</h2>
 											<h2>Changes</h2>
-											<p>All changed objects are shown in a list, with the tags you have edited. Click the place name to edit it again,
+											<p>All changed objects are shown in the "Changes" tag, along with the tags you edited. Click the place name to open it again,
 												or click the "Revert" button to discard the changes.</p>
-											<p>The "Download OSM file" button returns an OpenStreetMap XML file, which you can open in JOSM or Merkaartor.
-												The changes are not sent to OpenStreetMap.</p>
-											<p>The "Submit changes" button allows to upload your edits to OpenStreetMap server.</p>
+											<p>To save your changes in OpenStreetMap database, click "Submit Changes". An OpenStreetMap user account is required, and Nomino will need to a be authorized to edit OSM data.</p>
+											<p>The "Download OSM file" button returns an OpenStreetMap XML file, which you can open in JOSM or Merkaartor.</p>
+											<h2>User preferences</h2>
+											<p>The preferences dialog is useful to choose the map layer to used in "Find Places" tab.</p>
+											<p>Most users want to translates place names into their own language. The "Preferred languague" option defines a language that will always be displayed in the "Translate" tab; if no translation exists in this language, a new empty line is addded.</p>
 											<h2>About</h2>
-											<p>This application was developed by Emmanuel Dewaele.
+											<p>This application was developped by Emmanuel Dewaele.
 												Nomino is free sotware released under the <a href="http://www.gnu.org/licenses/agpl-3.0.html">Affero General Public License</a>.
 												You are free to contribute on <a href="http://gitorious.org/nomino">Gitorious</a>.</p>
 											<p>Acknowledgements:</p>

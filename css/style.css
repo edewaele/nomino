@@ -93,3 +93,7 @@ body{
 .name_edit{
 	width:250px
 }
+
+#tabNavButtons a{
+	margin:3px;
+}

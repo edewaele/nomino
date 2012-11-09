@@ -185,7 +185,7 @@ switch ($action)
 	 * Save the preferences
 	 */
 	case 'savePref':
-		if(isset($_GET["k"]) && isset($_GET["v"]))
+		if($osmApi->getCredentials()->hasAccessToken() && $osmApi->isAllowedToReadPrefs() && isset($_GET["k"]) && isset($_GET["v"]))
 			$osmApi->setUserPreference($_GET["k"], $_GET["v"]);
 		break;
 

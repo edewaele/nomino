@@ -51,10 +51,11 @@ try{
 			var ISO639 = [];
 			for(var code in LANGUAGE_CODES)ISO639.push(code);
 			<?php 
-				if($osmApi->getCredentials() != null && $osmApi->isAllowedToReadPrefs()){
+				if($osmApi->getCredentials()->hasAccessToken() && $osmApi->isAllowedToReadPrefs()){
 					foreach(Conf::$PREF_NAMES as $key){
 						$cookVal = "";
-						if(array_key_exists($key,$osmApi->getUserPreferences()))$cookVal = $osmApi->getUserPreferences()[$key];
+						$userPrefs = $osmApi->getUserPreferences();
+                        if(array_key_exists($key,$osmApi->getUserPreferences()))$cookVal = $userPrefs[$key];
 						echo '$.cookie("'.$key.'","'.$cookVal.'");';
 					}	 
 				}?>

@@ -10,7 +10,7 @@ body{
 
 #appTitle{
 	font-family:'Metamorphous', cursive;
-	font-size:30px
+	font-size:25px
 }
 
 #appTitle #subtitle1{
@@ -94,6 +94,6 @@ body{
 	width:250px
 }
 
-#tabNavButtons a{
+#tabNavButtons a,#tabNavButtons span{
 	margin:3px;
 }

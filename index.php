@@ -85,13 +85,14 @@ try{
 				<p>Choose the map layer<br>
 					<input type="radio" id="radioPrefMapquest" name="mapLayer"> <label for="radioPrefMapquest">Mapquest</label>
 					<br><input type="radio" id="radioPrefToolserver" name="mapLayer"> 
-					<label for="radioPrefToolserver">Toolserver localised maps
-						<select id="selectPrefMapLang" disabled="disabled"><?php
-foreach (Conf::$TOOLSERVER_LANGUAGES as $lang)
-{
-	echo '<option value="' . $lang . '">' . $lang . (array_key_exists($lang, Conf::$LANGUAGE_CODES) ? (" (" . Conf::$LANGUAGE_CODES[$lang] . ")") : "") . '</option>';
-}
-?></select></label></p>
+					<label for="radioPrefToolserver">Toolserver localised maps</label>
+					<select id="selectPrefMapLang" disabled="disabled"><?php
+					foreach (Conf::$TOOLSERVER_LANGUAGES as $lang)
+					{
+						echo '<option value="' . $lang . '">' . $lang . (array_key_exists($lang, Conf::$LANGUAGE_CODES) ? (" (" . Conf::$LANGUAGE_CODES[$lang] . ")") : "") . '</option>';
+					}
+					?></select>
+				</p>
 				<h3>Preferred language</h3>
 				<p><input type="checkbox" id="checkPrefAutoTrans">
 					<label for="checkPrefAutoTrans">When editing a place, add automically a field for translating into this language</label>

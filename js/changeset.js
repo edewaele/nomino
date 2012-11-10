@@ -56,6 +56,9 @@ function revertChange(type,id)
     });
 }
 
+/**
+ * The user tries submitting changes to OpenStreetMap
+ */
 function submitChanges()
 {
 	$( "#waitDialog" ).dialog('open');
@@ -68,10 +71,13 @@ function submitChanges()
 		success: function(e){
 			$( "#waitDialog" ).dialog('close');
 			if(e == 1)
+			{
 				alert("Changes saved ");
-			else
+				loadChangeset();
+			}
+			else // not authorised
 				osmAuth();
 		},
-		error: function(e){alert('Error while retrieving OSM object');$( "#waitDialog" ).dialog('close');}
+		error: function(e){alert('Error submitting changes');$( "#waitDialog" ).dialog('close');}
     });
 }

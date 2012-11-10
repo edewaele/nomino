@@ -25,7 +25,7 @@ switch ($action)
 			}
 			catch (Exception $e)
 			{
-				echo 0;
+				echo $e->getMessage();
 			}
 		}
 		break;
@@ -175,7 +175,10 @@ switch ($action)
 	case 'save':
 		// TODO implement commits
 		if($osmApi->isAllowedToWriteApi())
+		{
 			echo $osmApi->saveChanges(Conf::COMMIT_MESSAGE);
+			$osmApi->removeAllObjects();
+		}
 		else 
 			echo 0;
 

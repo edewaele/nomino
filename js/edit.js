@@ -179,7 +179,9 @@ function selectLang(event)
 	{
 		if(!("name:"+$("#edit_lang").val() in objectNames))
 		{
+			$(".name_edit").show();
 			$("#link_add_tr").show();
+			$("#type-lang-tip").remove();
 			typingLanguage = false;
 			rowLanguages[numAltName-1] = "name:"+$("#edit_lang").val();
 			objectNames["name:"+$("#edit_lang").val()] = "";
@@ -206,7 +208,10 @@ function addLine()
 	if(!typingLanguage)
 	{
 		$("#table_names").append("<tr class=\"alternative\" id=\"alternative-"+numAltName+"\"><td><input type=\"text\" id=\"edit_lang\" size=\"2\" maxlength=\"2\"></td>"+
-				"<td style=\"display:none\"><input type=\"text\" id=\"name-edit-"+numAltName+"\" class=\"name_edit\"></td>"+
+				"<td>" +
+					"<span id=\"type-lang-tip\" class=\"placeDetails\">type a language code (ie. en, fr, de)</span>"+
+					"<input type=\"text\" id=\"name-edit-"+numAltName+"\" class=\"name_edit\" style=\"display:none\">" +
+				"</td>"+
 				"<td style=\"display:none\"><a href=\"javascript:removeRow("+numAltName+")\"><img src=\"img/delete.png\"></td></tr>");
 		$("#edit_lang").autocomplete({source:ISO639,close:selectLang});
 		$("#edit_lang").blur(selectLang);

@@ -209,7 +209,7 @@ function addLine()
 	{
 		$("#table_names").append("<tr class=\"alternative\" id=\"alternative-"+numAltName+"\"><td><input type=\"text\" id=\"edit_lang\" size=\"2\" maxlength=\"2\"></td>"+
 				"<td>" +
-					"<span id=\"type-lang-tip\" class=\"placeDetails\">type a language code (ie. en, fr, de)</span>"+
+					"<span id=\"type-lang-tip\" class=\"placeDetails\">type a <a href=\"http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes\" target=\"blank\">language code (ie. en, fr, de)</a></span>"+
 					"<input type=\"text\" id=\"name-edit-"+numAltName+"\" class=\"name_edit\" style=\"display:none\">" +
 				"</td>"+
 				"<td style=\"display:none\"><a href=\"javascript:removeRow("+numAltName+")\"><img src=\"img/delete.png\"></td></tr>");

@@ -97,3 +97,7 @@ body{
 #tabNavButtons a,#tabNavButtons span{
 	margin:3px;
 }
+
+#linkOsmObject{
+	font-size:85%
+}

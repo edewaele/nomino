@@ -172,7 +172,7 @@ try{
 												<a href="javascript:displayNameField('<?php echo $key; ?>','')" id="link_set_<?php echo $key; ?>"><img src="img/add.png"> Set <?php echo strtolower($label); ?></a>
 <?php } ?>
 										</p>
-										<h3>Other tags</h3>
+										<h3>Other tags <a href="#" target="_blank" id="linkOsmObject">(View OSM Object)</a></h3>
 										<table id="table_other_tags">
 										</table>
 										</form>

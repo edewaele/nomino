@@ -149,6 +149,9 @@ function beginEdit(type,id)
 			}
 			numAltName++;
 			
+			// set the "View OSM Object" link
+			$("#linkOsmObject").attr("href","http://www.openstreetmap.org/browse/"+type+"/"+id);
+			
 			setChangeEvents();
 			$("#tabs").tabs("enable",1);
 			$("#tabs").tabs("select",1);

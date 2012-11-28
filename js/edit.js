@@ -14,6 +14,7 @@ function setChangeEvents()
 	$(".name_edit").unbind();
 	$(".name_edit").change(function(){
 		objectNames[$(this).attr("name")] = $(this).val();
+//		alert($(this).attr("name")+" => "+$(this).val())	
 	});
 	// set the autocompletion for all edits fields, with existing values
 	$(".name_edit").autocomplete("destroy");
@@ -24,7 +25,10 @@ function setChangeEvents()
 			proposedNames.push($(this).val());
 		}
 	});
-	$(".name_edit").autocomplete({source:proposedNames});
+	$(".name_edit").autocomplete({
+		source:proposedNames,
+		select:function(ui,event){$(this).val(event.item.value);$(".name_edit").change()}// trigger the change event to save the autocompleted value
+	});
 }
 
 /**

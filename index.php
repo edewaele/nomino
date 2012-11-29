@@ -8,6 +8,19 @@
 require_once('conf.php');
 require_once('common.inc.php');
 
+// initialise gettext system for PHP strings
+$gettextLang= substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+if(array_key_exists($gettextLang, Conf::$UI_LANGUAGUES))
+{
+	$lang=Conf::$UI_LANGUAGUES[$gettextLang];
+	$filename = 'default';
+	putenv("LC_ALL=$lang");
+	setlocale(LC_ALL, $lang);
+	bindtextdomain($filename, './locale');
+	bind_textdomain_codeset($filename, "UTF-8");
+	textdomain($filename);
+}
+
 require_once('osmApi.inc.php');
 
 try{
@@ -21,6 +34,7 @@ try{
 <html>
 	<head>
 		<title>Nomino</title>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 		<link type="text/css" href="lib/jQuery/css/custom-theme/jquery-ui-1.8.18.custom.css" rel="stylesheet" />	
 		<script type="text/javascript" src="lib/jQuery/js/jquery-1.7.1.min.js"></script>
 		<script src="lib/jQuery/js/jquery-ui-1.8.18.custom.min.js"></script>
@@ -75,17 +89,17 @@ try{
 		<!-- Dialogs -->
 		<div id="waitDialog" style="display: none"><div id="progressbar"></div></div>
 		<div id="authDialog" style="display: none">
-			<p>To save changes in OSM database you have to be authenticated at osm.org.</p>
-			<p>After authentification you'll be redirected back here.</p>
+			<p><?php echo _("To save changes in OSM database you have to be authenticated at osm.org.");?></p>
+			<p><?php echo _("After authentification you'll be redirected back here.");?></p>
 		</div>
 		<div id="selectPlaceDialog" style="display: none"><form name="selectPlace"></form></div>
-		<div id="preferencesDialog" style="display:none" title="Preferences">
+		<div id="preferencesDialog" style="display:none" title="<?php echo _("Preferences");?>">
 			<form name="preferencesForm">
-				<h3>Map</h3>
-				<p>Choose the map layer<br>
+				<h3><?php echo _("Map");?></h3>
+				<p><?php echo _("Choose the map layer");?><br>
 					<input type="radio" id="radioPrefMapquest" name="mapLayer"> <label for="radioPrefMapquest">Mapquest</label>
 					<br><input type="radio" id="radioPrefToolserver" name="mapLayer"> 
-					<label for="radioPrefToolserver">Toolserver localised maps</label>
+					<label for="radioPrefToolserver"><?php echo _("Toolserver localised maps");?></label>
 					<select id="selectPrefMapLang" disabled="disabled"><?php
 					foreach (Conf::$TOOLSERVER_LANGUAGES as $lang)
 					{
@@ -93,9 +107,9 @@ try{
 					}
 					?></select>
 				</p>
-				<h3>Preferred language</h3>
+				<h3><?php echo _("Preferred language");?></h3>
 				<p><input type="checkbox" id="checkPrefAutoTrans">
-					<label for="checkPrefAutoTrans">When editing a place, add automically a field for translating into this language</label>
+					<label for="checkPrefAutoTrans"><?php echo _("When editing a place, add automically a field for translating into this language");?></label>
 					<input type="text" id="textPrefLanguage" size="3" maxlength="3" disabled="disabled"></p>
 			</form>
 		</div>
@@ -103,56 +117,56 @@ try{
 
 			<?php
 			if( $user == null ){
-				?><a href="javascript:osmAuth()" style="float:right">Login with OSM</a><?php
+				?><a href="javascript:osmAuth()" style="float:right"><?php echo _("Login with OSM");?></a><?php
 			}else{
 				echo '<span style="float:right">'.$user->getName().'</span>';
 			}
 			?>
-			<a href="javascript:showPreferences()" style="float:right"> Preferences</a>
+			<a href="javascript:showPreferences()" style="float:right"> <?php echo _("Preferences");?></a>
 			<a href="javascript:showPreferences()" style="float:right"><img src="img/prefs.png"/></a>
 		</div>
 
 		<div id="mainContainer">
-			<div id="appTitle">OpenStreetMap Nomino<span id="subtitle1">(verb, latin)</span> <span id="subtitle2">I name</span></div>
+			<div id="appTitle">OpenStreetMap Nomino<span id="subtitle1"><?php echo _("(verb, latin)");?></span> <span id="subtitle2"><?php echo _("I name");?></span></div>
 			<div id="tabs">
 				<ul>
-					<li><a href="#tabs-1">Find Places</a></li>
-					<li><a href="#tabs-2">Translate</a></li>
-					<li><a href="#tabs-3">View changes</a></li>
-					<li><a href="#tabs-4">Documentation</a></li>
+					<li><a href="#tabs-1"><?php echo _("Find Places");?></a></li>
+					<li><a href="#tabs-2"><?php echo _("Translate");?></a></li>
+					<li><a href="#tabs-3"><?php echo _("View changes");?></a></li>
+					<li><a href="#tabs-4"><?php echo _("Documentation");?></a></li>
 				</ul>
 				<div id="tabs-1"><!-- Find places -->
 					<div id="radio_find_mode">
-						<input type="radio" id="radio_find_mode1" name="radio" checked="checked" /><label for="radio_find_mode1">Find by name</label>
-						<input type="radio" id="radio_find_mode2" name="radio"/><label for="radio_find_mode2">OSM Object</label>
+						<input type="radio" id="radio_find_mode1" name="radio" checked="checked" /><label for="radio_find_mode1"><?php echo _("Find by name");?></label>
+						<input type="radio" id="radio_find_mode2" name="radio"/><label for="radio_find_mode2"><?php echo _("OSM Object");?></label>
 					</div>
 					<div id="find_mode_1">
 						<form name="findPlace" action="javascript:search_for_places();">
 							<input type="text" name="query" id="query">
-							<input type="submit" value="Search" id="button_find_places">
+							<input type="submit" value="<?php echo _("Search");?>" id="button_find_places">
 						</form>
 						<div id="map_find_places"  style="float:left">
 						</div>
-						<div id="list_find_places"><ul><li>Right-click the map to select places</li></ul></div>
+						<div id="list_find_places"><ul><li><?php echo _("Right-click the map to select places");?></li></ul></div>
 					</div>
 					<div id="find_mode_2" style="display:none">
 						<form name="findOSMObject" action="javascript:search_for_osm_object();">
 							<select name="search_osm_type" id="search_osm_type">
-								<option value="node">Node</option>
-								<option value="way">Way</option>
-								<option value="relation">Relation</option>
+								<option value="node"><?php echo _("Node");?></option>
+								<option value="way"><?php echo _("Way");?></option>
+								<option value="relation"><?php echo _("Relation");?></option>
 							</select>
 							<input type="text" name="search_osm_id" id="search_osm_id">
-							<input type="submit" value="Search" id="button_find_places">
+							<input type="submit" value="<?php echo _("Search");?>" id="button_find_places">
 						</form>
 					</div>
 				</div>
 				<div id="tabs-2"><!-- Translate -->
 					<form name="editNames" action="javascript:saveObject()">
-						<h3>Names <input type="submit" value="Save" id="button_save_edit"></h3>
+						<h3><?php echo _("Names");?> <input type="submit" value="<?php echo _("Save");?>" id="button_save_edit"></h3>
 						<table id="table_names">
 							<tr>
-								<td>Name</td>
+								<td><?php echo _("Name");?></td>
 								<td><input type="text" id="edit_name" class="name_edit" name="name"></td>
 							</tr>
 <?php foreach (Conf::$NAME_FIELDS as $key => $label)
@@ -165,22 +179,21 @@ try{
 											</tr>
 											<?php } ?>
 										</table>
-										<p id="link_add_tr"><a href="javascript:addLine()"><img src="img/add.png"> Add translation</a>
-<?php foreach (Conf::$NAME_FIELDS as $key => $label)
-{
-	?>
-												<a href="javascript:displayNameField('<?php echo $key; ?>','')" id="link_set_<?php echo $key; ?>"><img src="img/add.png"> Set <?php echo strtolower($label); ?></a>
-<?php } ?>
+										<p id="link_add_tr"><a href="javascript:addLine()"><img src="img/add.png"> <?php echo _("Add translation");?></a>
+										<a href="javascript:displayNameField('old_name','')" id="link_set_old_name"><img src="img/add.png"> <?php echo _("Set old name");?></a>
+										<a href="javascript:displayNameField('alt_name','')" id="link_set_alt_name"><img src="img/add.png"> <?php echo _("Set alternative name");?></a>
+										<a href="javascript:displayNameField('official_name','')" id="link_set_official_name"><img src="img/add.png"> <?php echo _("Set official name");?></a>
+										<a href="javascript:displayNameField('loc_name','')" id="link_set_loc_name"><img src="img/add.png"> <?php echo _("Set old name");?></a>
 										</p>
-										<h3>Other tags <a href="#" target="_blank" id="linkOsmObject">(View OSM Object)</a></h3>
+										<h3><?php echo _("Other tags");?> <a href="#" target="_blank" id="linkOsmObject"><?php echo _("(View OSM Object)");?></a></h3>
 										<table id="table_other_tags">
 										</table>
 										</form>
 										</div>
 										<div id="tabs-3"><!-- View changes -->
-											<h3>Changes 
-												<input type="submit" value="Submit changes" id="button_submit_changes" class="changesetButton" disabled="disabled" onclick="submitChanges()">
-												<input type="submit" value="Download OSM file" id="button_download_changes" class="changesetButton" disabled="disabled" onclick="downloadOsmFile()">
+											<h3><?php echo _("Changes ");?>
+												<input type="submit" value="<?php echo _("Submit changes");?>" id="button_submit_changes" class="changesetButton" disabled="disabled" onclick="submitChanges()">
+												<input type="submit" value="<?php echo _("Download OSM file");?>" id="button_download_changes" class="changesetButton" disabled="disabled" onclick="downloadOsmFile()">
 											</h3>
 											<div id="table_changes">
 												<ul></ul>

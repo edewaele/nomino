@@ -1,0 +1,158 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-11-29 20:11+0100\n"
+"PO-Revision-Date: 2012-11-29 21:39+0100\n"
+"Last-Translator: Emmanuel Dewaele <emmanuel.dewaele@gmail.com>\n"
+"Language-Team: \n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: French\n"
+
+#: index.php:78
+msgid "To save changes in OSM database you have to be authenticated at osm.org."
+msgstr ""
+
+#: index.php:79
+msgid "After authentification you'll be redirected back here."
+msgstr ""
+
+#: index.php:82
+#: index.php:111
+msgid "Preferences"
+msgstr "Préférences"
+
+#: index.php:84
+msgid "Map"
+msgstr ""
+
+#: index.php:85
+msgid "Choose the map layer"
+msgstr ""
+
+#: index.php:88
+msgid "Toolserver localised maps"
+msgstr ""
+
+#: index.php:96
+msgid "Preferred language"
+msgstr ""
+
+#: index.php:98
+msgid "When editing a place, add automically a field for translating into this language"
+msgstr ""
+
+#: index.php:106
+msgid "Login with OSM"
+msgstr ""
+
+#: index.php:116
+msgid "(verb, latin)"
+msgstr "(verbe, latin)"
+
+#: index.php:116
+msgid "I name"
+msgstr ""
+
+#: index.php:119
+msgid "Find Places"
+msgstr ""
+
+#: index.php:120
+msgid "Translate"
+msgstr ""
+
+#: index.php:121
+msgid "View changes"
+msgstr ""
+
+#: index.php:122
+msgid "Documentation"
+msgstr ""
+
+#: index.php:126
+msgid "Find by name"
+msgstr ""
+
+#: index.php:127
+msgid "OSM Object"
+msgstr ""
+
+#: index.php:132
+#: index.php:146
+msgid "Search"
+msgstr ""
+
+#: index.php:136
+msgid "Right-click the map to select places"
+msgstr ""
+
+#: index.php:141
+msgid "Node"
+msgstr ""
+
+#: index.php:142
+msgid "Way"
+msgstr ""
+
+#: index.php:143
+msgid "Relation"
+msgstr ""
+
+#: index.php:152
+msgid "Names"
+msgstr ""
+
+#: index.php:152
+msgid "Save"
+msgstr ""
+
+#: index.php:155
+msgid "Name"
+msgstr ""
+
+#: index.php:168
+msgid "Add translation"
+msgstr ""
+
+#: index.php:169
+#: index.php:172
+msgid "Set old name"
+msgstr ""
+
+#: index.php:170
+msgid "Set alternative name"
+msgstr ""
+
+#: index.php:171
+msgid "Set official name"
+msgstr ""
+
+#: index.php:174
+msgid "Other tags"
+msgstr ""
+
+#: index.php:174
+msgid "(View OSM Object)"
+msgstr ""
+
+#: index.php:180
+msgid "Changes "
+msgstr ""
+
+#: index.php:181
+msgid "Submit changes"
+msgstr ""
+
+#: index.php:182
+msgid "Download OSM file"
+msgstr ""
+

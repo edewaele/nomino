@@ -60,4 +60,9 @@ class Conf
 	 * @var array of string
 	 */
 	public static $PREF_NAMES = array('map','prefLang');
+	/**
+	 * List of PHP translations
+	 * @var array of string
+	 */
+	public static $UI_LANGUAGUES = array('fr'=>'fr_FR.utf8');
 }

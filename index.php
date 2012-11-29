@@ -83,6 +83,7 @@ try{
 				});
 			</script>
 <?php } ?>
+		<?php require("jsstrings.php");?>
 	</head>
 	<body>
 
@@ -92,7 +93,7 @@ try{
 			<p><?php echo _("To save changes in OSM database you have to be authenticated at osm.org.");?></p>
 			<p><?php echo _("After authentification you'll be redirected back here.");?></p>
 		</div>
-		<div id="selectPlaceDialog" style="display: none"><form name="selectPlace"></form></div>
+		<div id="selectPlaceDialog" style="display: none" title="<?php echo _("Choose a place");?>"><form name="selectPlace"></form></div>
 		<div id="preferencesDialog" style="display:none" title="<?php echo _("Preferences");?>">
 			<form name="preferencesForm">
 				<h3><?php echo _("Map");?></h3>

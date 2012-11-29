@@ -194,15 +194,19 @@ $(function() {
 		resizable:false,
 		autoOpen:false,
 		closeOnEscape:true,
-		buttons:{
-			"Save":function(){
-				savePreferences();
-				$(this).dialog('close');
-			},
-			"Cancel":function(){
-				$(this).dialog('close');
+		buttons:[{
+		         text: LANG.SAVE,
+		         click:function(){
+					savePreferences();
+					$(this).dialog('close');
+				}
+			},{
+		         text: LANG.CANCEL,
+		         click:function(){
+					$(this).dialog('close');
+				}
 			}
-		}
+		]
 	});
 	
 	$("input[name='mapLayer']").change(function(){
@@ -291,7 +295,7 @@ function savePreferences()
 			},
 			success: function(e){
 			},
-			error: function(e){alert('Error saving user preferences');}
+			error: function(e){alert(LANG.ERROR_PREF);}
 	    });
 	}
 }
@@ -333,13 +337,13 @@ function osmAuth()
 		},
 		buttons: [
 		{
-			text: "Cancel",
+			text: LANG.CANCEL,
 			click: function() {
 				$(this).dialog("close");
 			}
 		},
 		{
-			text: "Go to authenticate",
+			text: LANG.AUTHENTICATE,
 			click: function() {
 				window.location = url ;
 			}

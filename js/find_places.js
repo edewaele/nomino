@@ -42,7 +42,7 @@ function search_for_places(address)
 			map_find_places.zoomToExtent(layer_find_places.getDataExtent());
 		},
 		error: function(){
-			alert('Error while loading places');
+			alert(LANG.ERROR_PLACES);
 		}
     });
 }
@@ -102,22 +102,25 @@ function search_for_position(lon,lat)
 				modal: true,
 				resizable:false,
 				autoOpen:true,
-				title:"Select a place",
-				buttons:{
-					"Choose":function(){
-						search_for_places($("#selectPlaceDialog input[name=place]:checked").val());
-						$(this).dialog('close');
-					},
-					"Cancel":function(){
-						$(this).dialog('close');
+				buttons:[{
+						text:LANG.CHOOSE,
+						click:function(){
+							search_for_places($("#selectPlaceDialog input[name=place]:checked").val());
+							$(this).dialog('close');
+						}
+					},{
+						text:LANG.CANCEL,
+						click:function(){
+							$(this).dialog('close');
+						}
 					}
-				}
+				]
 			});
 			
 			//$( "#waitDialog" ).dialog('close');
 		},
 		error: function(){
-			alert('Error while loading places');
+			alert(LANG.ERROR_PLACES);
 		}
     });
 }

@@ -53,11 +53,11 @@ function saveObject()
 			}
 			else
 			{
-				alert("Error while saving object");
+				alert(LANG.ERROR_SAVE);
 			}
 			$( "#waitDialog" ).dialog('close');
 		},
-		error: function(e){alert('Error while sending object data');}
+		error: function(e){alert(LANG.ERROR_SAVE);}
     });
 }
 
@@ -161,7 +161,7 @@ function beginEdit(type,id)
 			$("#tabs").tabs("select",1);
 			$( "#waitDialog" ).dialog('close');
 		},
-		error: function(e){$( "#waitDialog" ).dialog('close');alert('Error while retrieving OSM object');}
+		error: function(e){$( "#waitDialog" ).dialog('close');alert(LANG.ERROR_RETRIEVE);}
     });
 }
 
@@ -203,7 +203,7 @@ function selectLang(event)
 			$("#name-edit-"+(numAltName-1)).focus();
 		}
 		else
-			alert("This language is already in use");
+			alert(LANG.ERROR_LANG_IN_USE);
 	}
 }
 
@@ -216,7 +216,7 @@ function addLine()
 	{
 		$("#table_names").append("<tr class=\"alternative\" id=\"alternative-"+numAltName+"\"><td><input type=\"text\" id=\"edit_lang\" size=\"2\" maxlength=\"2\"></td>"+
 				"<td>" +
-					"<span id=\"type-lang-tip\" class=\"placeDetails\">type a <a href=\"http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes\" target=\"blank\">language code (ie. en, fr, de)</a></span>"+
+					"<span id=\"type-lang-tip\" class=\"placeDetails\">"+LANG.TIP1+" <a href=\""+LANG.TIP_WP_ISO639+"\" target=\"blank\">"+LANG.TIP2+"</a></span>"+
 					"<input type=\"text\" id=\"name-edit-"+numAltName+"\" class=\"name_edit\" style=\"display:none\">" +
 				"</td>"+
 				"<td style=\"display:none\"><a href=\"javascript:removeRow("+numAltName+")\"><img src=\"img/delete.png\"></td></tr>");

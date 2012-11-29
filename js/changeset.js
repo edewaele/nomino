@@ -13,14 +13,14 @@ function loadChangeset()
 		success: function(e){
 			$("#table_changes ul").empty();
 			$(e).find('Object').each(function () {
-		    	$("#table_changes ul").append("<li><a href=\"javascript:beginEdit('"+$(this).attr("osm_type")+"',"+$(this).attr("osm_id")+")\">"+$(this).attr("name")+"</a><a href=\"javascript:revertChange('"+$(this).attr("osm_type")+"',"+$(this).attr("osm_id")+")\"><img src=\"img/revert.png\" title=\"Revert\"></a><br><span class=\"dirtyTags\">"+$(this).attr("dirty_tags")+"</span></li>");
+		    	$("#table_changes ul").append("<li><a href=\"javascript:beginEdit('"+$(this).attr("osm_type")+"',"+$(this).attr("osm_id")+")\">"+$(this).attr("name")+"</a><a href=\"javascript:revertChange('"+$(this).attr("osm_type")+"',"+$(this).attr("osm_id")+")\"><img src=\"img/revert.png\" title=\""+LANG.REVERT+"\"></a><br><span class=\"dirtyTags\">"+$(this).attr("dirty_tags")+"</span></li>");
 			});
 			if($(e).find('Object').length > 0)
 				$(".changesetButton").button('enable');
 			else 
 				$(".changesetButton").button('disable');
 		},
-		error: function(e){alert('Error while retrieving OSM object');}
+		error: function(e){alert(LANG.ERROR_RETRIEVE);}
     });
 }
 
@@ -52,7 +52,7 @@ function revertChange(type,id)
 			$( "#waitDialog" ).dialog('close');
 			loadChangeset();
 		},
-		error: function(e){alert('Error while retrieving OSM object');}
+		error: function(e){alert(LANG.ERROR_RETRIEVE);}
     });
 }
 
@@ -72,12 +72,12 @@ function submitChanges()
 			$( "#waitDialog" ).dialog('close');
 			if(e == 1)
 			{
-				alert("Changes saved ");
+				alert(LANG.SAVED);
 				loadChangeset();
 			}
 			else // not authorised
 				osmAuth();
 		},
-		error: function(e){alert('Error submitting changes');$( "#waitDialog" ).dialog('close');}
+		error: function(e){alert(LANG.ERROR_SUBMIT);$( "#waitDialog" ).dialog('close');}
     });
 }

@@ -3,22 +3,23 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-11-30 00:00+0100\n"
-"PO-Revision-Date: 2012-11-30 00:02+0100\n"
-"Last-Translator: Emmanuel Dewaele <emmanuel.dewaele@gmail.com>\n"
-"Language-Team: \n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: French\n"
 
 #: index.php:94
-msgid "To save changes in OSM database you have to be authenticated at osm.org."
+msgid ""
+"To save changes in OSM database you have to be authenticated at osm.org."
 msgstr ""
 
 #: index.php:95
@@ -29,10 +30,9 @@ msgstr ""
 msgid "Choose a place"
 msgstr ""
 
-#: index.php:98
-#: index.php:127
+#: index.php:98 index.php:127
 msgid "Preferences"
-msgstr "Préférences"
+msgstr ""
 
 #: index.php:100
 msgid "Map"
@@ -51,7 +51,9 @@ msgid "Preferred language"
 msgstr ""
 
 #: index.php:114
-msgid "When editing a place, add automically a field for translating into this language"
+msgid ""
+"When editing a place, add automically a field for translating into this "
+"language"
 msgstr ""
 
 #: index.php:122
@@ -60,7 +62,7 @@ msgstr ""
 
 #: index.php:132
 msgid "(verb, latin)"
-msgstr "(verbe, latin)"
+msgstr ""
 
 #: index.php:132
 msgid "I name"
@@ -90,8 +92,7 @@ msgstr ""
 msgid "OSM Object"
 msgstr ""
 
-#: index.php:148
-#: index.php:162
+#: index.php:148 index.php:162
 msgid "Search"
 msgstr ""
 
@@ -115,8 +116,7 @@ msgstr ""
 msgid "Names"
 msgstr ""
 
-#: index.php:168
-#: jsstrings.php:18
+#: index.php:168 jsstrings.php:18
 msgid "Save"
 msgstr ""
 
@@ -128,8 +128,7 @@ msgstr ""
 msgid "Add translation"
 msgstr ""
 
-#: index.php:185
-#: index.php:188
+#: index.php:185 index.php:188
 msgid "Set old name"
 msgstr ""
 
@@ -163,11 +162,11 @@ msgstr ""
 
 #: jsstrings.php:8
 msgid "Authenticate"
-msgstr "S'authentifier"
+msgstr ""
 
 #: jsstrings.php:9
 msgid "Cancel"
-msgstr "Annuler"
+msgstr ""
 
 #: jsstrings.php:10
 msgid "Choose"
@@ -216,4 +215,3 @@ msgstr ""
 #: jsstrings.php:22
 msgid "http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes"
 msgstr ""
-

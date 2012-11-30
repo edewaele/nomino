@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2012-11-30 00:00+0100\n"
-"PO-Revision-Date: 2012-11-30 00:02+0100\n"
+"PO-Revision-Date: 2012-11-30 12:47+0100\n"
 "Last-Translator: Emmanuel Dewaele <emmanuel.dewaele@gmail.com>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -16,18 +16,21 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-Language: French\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Language: fr_FR\n"
+"X-Source-Language: C\n"
 
 #: index.php:94
 msgid "To save changes in OSM database you have to be authenticated at osm.org."
-msgstr ""
+msgstr "Pour sauvegarder les modifications dans la base de données OSM vous devez vous authentifier."
 
 #: index.php:95
 msgid "After authentification you'll be redirected back here."
-msgstr ""
+msgstr "Après l'authentification vous serez redirigé ici."
 
 #: index.php:97
 msgid "Choose a place"
-msgstr ""
+msgstr "Choisir un lieu"
 
 #: index.php:98
 #: index.php:127
@@ -36,27 +39,27 @@ msgstr "Préférences"
 
 #: index.php:100
 msgid "Map"
-msgstr ""
+msgstr "Fond de carte"
 
 #: index.php:101
 msgid "Choose the map layer"
-msgstr ""
+msgstr "Choisir la couche"
 
 #: index.php:104
 msgid "Toolserver localised maps"
-msgstr ""
+msgstr "Cartes localisées de Toolserver"
 
 #: index.php:112
 msgid "Preferred language"
-msgstr ""
+msgstr "Langue préférée"
 
 #: index.php:114
 msgid "When editing a place, add automically a field for translating into this language"
-msgstr ""
+msgstr "Lors de l'édition d'un lieu, ajouter automatiquement un champ pour traduire dans cette langue"
 
 #: index.php:122
 msgid "Login with OSM"
-msgstr ""
+msgstr "Se connecter sur OSM"
 
 #: index.php:132
 msgid "(verb, latin)"
@@ -64,102 +67,102 @@ msgstr "(verbe, latin)"
 
 #: index.php:132
 msgid "I name"
-msgstr ""
+msgstr "Je nomme"
 
 #: index.php:135
 msgid "Find Places"
-msgstr ""
+msgstr "Trouver un lieu"
 
 #: index.php:136
 msgid "Translate"
-msgstr ""
+msgstr "Traduire"
 
 #: index.php:137
 msgid "View changes"
-msgstr ""
+msgstr "Voir les modifications"
 
 #: index.php:138
 msgid "Documentation"
-msgstr ""
+msgstr "Documentation"
 
 #: index.php:142
 msgid "Find by name"
-msgstr ""
+msgstr "Trouver par nom"
 
 #: index.php:143
 msgid "OSM Object"
-msgstr ""
+msgstr "Objet OSM"
 
 #: index.php:148
 #: index.php:162
 msgid "Search"
-msgstr ""
+msgstr "Chercher"
 
 #: index.php:152
 msgid "Right-click the map to select places"
-msgstr ""
+msgstr "Clic-droit sur la carte pour selectionner un lieu"
 
 #: index.php:157
 msgid "Node"
-msgstr ""
+msgstr "Nœud"
 
 #: index.php:158
 msgid "Way"
-msgstr ""
+msgstr "Ligne"
 
 #: index.php:159
 msgid "Relation"
-msgstr ""
+msgstr "Relation"
 
 #: index.php:168
 msgid "Names"
-msgstr ""
+msgstr "Noms"
 
 #: index.php:168
 #: jsstrings.php:18
 msgid "Save"
-msgstr ""
+msgstr "Enregistrer"
 
 #: index.php:171
 msgid "Name"
-msgstr ""
+msgstr "Nom"
 
 #: index.php:184
 msgid "Add translation"
-msgstr ""
+msgstr "Ajouter une traduction"
 
 #: index.php:185
 #: index.php:188
 msgid "Set old name"
-msgstr ""
+msgstr "Définir l'ancien nom"
 
 #: index.php:186
 msgid "Set alternative name"
-msgstr ""
+msgstr "Définir un nom alternatif"
 
 #: index.php:187
 msgid "Set official name"
-msgstr ""
+msgstr "Définir le nom officiel"
 
 #: index.php:190
 msgid "Other tags"
-msgstr ""
+msgstr "Autres attributs"
 
 #: index.php:190
 msgid "(View OSM Object)"
-msgstr ""
+msgstr "(Voir l'objet OSM)"
 
 #: index.php:196
 msgid "Changes "
-msgstr ""
+msgstr "Modifications"
 
 #: index.php:197
 msgid "Submit changes"
-msgstr ""
+msgstr "Publier les modifications"
 
 #: index.php:198
 msgid "Download OSM file"
-msgstr ""
+msgstr "Télécharger le fichier OSM"
 
 #: jsstrings.php:8
 msgid "Authenticate"
@@ -171,49 +174,49 @@ msgstr "Annuler"
 
 #: jsstrings.php:10
 msgid "Choose"
-msgstr ""
+msgstr "Choisir"
 
 #: jsstrings.php:11
 msgid "This language is already in use"
-msgstr ""
+msgstr "Cette langue est déjà définie"
 
 #: jsstrings.php:12
 msgid "Error while loading places"
-msgstr ""
+msgstr "Erreur lors du chargement du lieu"
 
 #: jsstrings.php:13
 msgid "Error saving user preferences"
-msgstr ""
+msgstr "Erreur lors de l'enregistrement des préférences de l'utilisateur"
 
 #: jsstrings.php:14
 msgid "Error while retrieving OSM object"
-msgstr ""
+msgstr "Erreur lors de la récupération de l'objet OSM"
 
 #: jsstrings.php:15
 msgid "Error while saving object"
-msgstr ""
+msgstr "Erreur lors de l'enregistrement de l'objet"
 
 #: jsstrings.php:16
 msgid "Error while submitting changes"
-msgstr ""
+msgstr "Erreur lors de l'envoi des modifications"
 
 #: jsstrings.php:17
 msgid "Revert"
-msgstr ""
+msgstr "Annuler les changements"
 
 #: jsstrings.php:19
 msgid "Changes saved"
-msgstr ""
+msgstr "Modifications enregistrées"
 
 #: jsstrings.php:20
 msgid "type a"
-msgstr ""
+msgstr "entrer un"
 
 #: jsstrings.php:21
 msgid "language code (ie. en, fr, de)"
-msgstr ""
+msgstr "code de langue (c.-à-d. en, fr, de)"
 
 #: jsstrings.php:22
 msgid "http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes"
-msgstr ""
+msgstr "https://fr.wikipedia.org/wiki/Liste_des_codes_ISO_639-1"
 

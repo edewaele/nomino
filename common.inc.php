@@ -24,3 +24,45 @@ function currentPageURL() {
 	}
 	return $u;
 }
+
+/**
+ * Language support manager
+ */
+class LanguageSupport
+{
+	private $lang = "";
+	public function __construct()
+	{
+		$this->lang= substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+	}
+	/**
+	 * initialise gettext system for PHP strings
+	 */
+	public function initGettext()
+	{
+		if(array_key_exists($this->lang, Conf::$UI_LANGUAGUES))
+		{
+			$lang=Conf::$UI_LANGUAGUES[$this->lang];
+			$filename = 'default';
+			putenv("LC_ALL=$lang");
+			setlocale(LC_ALL, $lang);
+			bindtextdomain($filename, './locale');
+			bind_textdomain_codeset($filename, "UTF-8");
+			textdomain($filename);
+		}
+	}
+	/**
+	 * Include the documentation file in "Documentation" tab
+	 */
+	public function printDoc()
+	{
+		$lngDir = "default";
+		if(array_key_exists($this->lang, Conf::$UI_LANGUAGUES) && file_exists("locale/".Conf::$UI_LANGUAGUES[$this->lang]."/doc.php"))
+		{
+			$lngDir = Conf::$UI_LANGUAGUES[$this->lang];
+		}
+		include("locale/".$lngDir."/doc.php");
+	} 
+}
+
+?>

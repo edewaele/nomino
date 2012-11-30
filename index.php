@@ -160,16 +160,27 @@ try{
 								<td><?php echo _("Name");?></td>
 								<td><input type="text" id="edit_name" class="name_edit" name="name"></td>
 							</tr>
-<?php foreach (Conf::$NAME_FIELDS as $key => $label)
-{
-	?>
-								<tr id="row_edit_<?php echo $key; ?>">
-									<td><?php echo $label; ?></td>
-									<td><input type="text" id="edit_<?php echo $key; ?>" class="name_edit" name="<?php echo $key; ?>"></td>
-									<td><a href="javascript:hideNameField('<?php echo $key; ?>')"><img src="img/delete.png"></td></td>
-											</tr>
-											<?php } ?>
-										</table>
+							<tr id="row_edit_old_name">
+								<td><?php echo _("Old name");?></td>
+								<td><input type="text" id="edit_old_name" class="name_edit" name="old_name"></td>
+								<td><a href="javascript:hideNameField('old_name')"><img src="img/delete.png"></td></td>
+							</tr>
+							<tr id="row_edit_alt_name">
+								<td><?php echo _("Alternative name");?></td>
+								<td><input type="text" id="edit_alt_name" class="name_edit" name="alt_name"></td>
+								<td><a href="javascript:hideNameField('alt_name')"><img src="img/delete.png"></td></td>
+							</tr>
+							<tr id="row_edit_official_name">
+								<td><?php echo _("Official name");?></td>
+								<td><input type="text" id="edit_official_name" class="name_edit" name="official_name"></td>
+								<td><a href="javascript:hideNameField('official_name')"><img src="img/delete.png"></td></td>
+							</tr>
+							<tr id="row_edit_loc_name">
+								<td><?php echo _("Local name");?></td>
+								<td><input type="text" id="edit_loc_name" class="name_edit" name="loc_name"></td>
+								<td><a href="javascript:hideNameField('loc_name')"><img src="img/delete.png"></td></td>
+							</tr>
+						</table>
 										<p id="link_add_tr"><a href="javascript:addLine()"><img src="img/add.png"> <?php echo _("Add translation");?></a>
 										<a href="javascript:displayNameField('old_name','')" id="link_set_old_name"><img src="img/add.png"> <?php echo _("Set old name");?></a>
 										<a href="javascript:displayNameField('alt_name','')" id="link_set_alt_name"><img src="img/add.png"> <?php echo _("Set alternative name");?></a>

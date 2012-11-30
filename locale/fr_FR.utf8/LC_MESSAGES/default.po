@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-30 19:13+0100\n"
-"PO-Revision-Date: 2012-11-30 19:13+0100\n"
+"POT-Creation-Date: 2012-11-30 20:11+0100\n"
+"PO-Revision-Date: 2012-11-30 20:12+0100\n"
 "Last-Translator: Emmanuel Dewaele <emmanuel.dewaele@gmail.com>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -127,43 +127,59 @@ msgstr "Enregistrer"
 msgid "Name"
 msgstr "Nom"
 
-#: index.php:173
+#: index.php:164
+msgid "Old name"
+msgstr "Ancien nom"
+
+#: index.php:169
+msgid "Alternative name"
+msgstr "Nom alternatif"
+
+#: index.php:174
+msgid "Official name"
+msgstr "Nom officiel"
+
+#: index.php:179
+msgid "Local name"
+msgstr "Nom local"
+
+#: index.php:184
 msgid "Add translation"
 msgstr "Ajouter une traduction"
 
-#: index.php:174
+#: index.php:185
 msgid "Set old name"
 msgstr "Définir l'ancien nom"
 
-#: index.php:175
+#: index.php:186
 msgid "Set alternative name"
 msgstr "Définir un nom alternatif"
 
-#: index.php:176
+#: index.php:187
 msgid "Set official name"
 msgstr "Définir le nom officiel"
 
-#: index.php:177
+#: index.php:188
 msgid "Set local name"
 msgstr "Définir le nom local"
 
-#: index.php:179
+#: index.php:190
 msgid "Other tags"
 msgstr "Autres attributs"
 
-#: index.php:179
+#: index.php:190
 msgid "(View OSM Object)"
 msgstr "(Voir l'objet OSM)"
 
-#: index.php:185
+#: index.php:196
 msgid "Changes "
 msgstr "Modifications"
 
-#: index.php:186
+#: index.php:197
 msgid "Submit changes"
 msgstr "Publier les modifications"
 
-#: index.php:187
+#: index.php:198
 msgid "Download OSM file"
 msgstr "Télécharger le fichier OSM"
 

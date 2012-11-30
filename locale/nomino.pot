@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-30 00:00+0100\n"
+"POT-Creation-Date: 2012-11-30 19:13+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,146 +17,150 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: index.php:94
+#: index.php:83
 msgid ""
 "To save changes in OSM database you have to be authenticated at osm.org."
 msgstr ""
 
-#: index.php:95
+#: index.php:84
 msgid "After authentification you'll be redirected back here."
 msgstr ""
 
-#: index.php:97
+#: index.php:86
 msgid "Choose a place"
 msgstr ""
 
-#: index.php:98 index.php:127
+#: index.php:87 index.php:116
 msgid "Preferences"
 msgstr ""
 
-#: index.php:100
+#: index.php:89
 msgid "Map"
 msgstr ""
 
-#: index.php:101
+#: index.php:90
 msgid "Choose the map layer"
 msgstr ""
 
-#: index.php:104
+#: index.php:93
 msgid "Toolserver localised maps"
 msgstr ""
 
-#: index.php:112
+#: index.php:101
 msgid "Preferred language"
 msgstr ""
 
-#: index.php:114
+#: index.php:103
 msgid ""
 "When editing a place, add automically a field for translating into this "
 "language"
 msgstr ""
 
-#: index.php:122
+#: index.php:111
 msgid "Login with OSM"
 msgstr ""
 
-#: index.php:132
+#: index.php:121
 msgid "(verb, latin)"
 msgstr ""
 
-#: index.php:132
+#: index.php:121
 msgid "I name"
 msgstr ""
 
-#: index.php:135
+#: index.php:124
 msgid "Find Places"
 msgstr ""
 
-#: index.php:136
+#: index.php:125
 msgid "Translate"
 msgstr ""
 
-#: index.php:137
+#: index.php:126
 msgid "View changes"
 msgstr ""
 
-#: index.php:138
+#: index.php:127
 msgid "Documentation"
 msgstr ""
 
-#: index.php:142
+#: index.php:131
 msgid "Find by name"
 msgstr ""
 
-#: index.php:143
+#: index.php:132
 msgid "OSM Object"
 msgstr ""
 
-#: index.php:148 index.php:162
+#: index.php:137 index.php:151
 msgid "Search"
 msgstr ""
 
-#: index.php:152
+#: index.php:141
 msgid "Right-click the map to select places"
 msgstr ""
 
-#: index.php:157
+#: index.php:146
 msgid "Node"
 msgstr ""
 
-#: index.php:158
+#: index.php:147
 msgid "Way"
 msgstr ""
 
-#: index.php:159
+#: index.php:148
 msgid "Relation"
 msgstr ""
 
-#: index.php:168
+#: index.php:157
 msgid "Names"
 msgstr ""
 
-#: index.php:168 jsstrings.php:18
+#: index.php:157 jsstrings.php:18
 msgid "Save"
 msgstr ""
 
-#: index.php:171
+#: index.php:160
 msgid "Name"
 msgstr ""
 
-#: index.php:184
+#: index.php:173
 msgid "Add translation"
 msgstr ""
 
-#: index.php:185 index.php:188
+#: index.php:174
 msgid "Set old name"
 msgstr ""
 
-#: index.php:186
+#: index.php:175
 msgid "Set alternative name"
 msgstr ""
 
-#: index.php:187
+#: index.php:176
 msgid "Set official name"
 msgstr ""
 
-#: index.php:190
+#: index.php:177
+msgid "Set local name"
+msgstr ""
+
+#: index.php:179
 msgid "Other tags"
 msgstr ""
 
-#: index.php:190
+#: index.php:179
 msgid "(View OSM Object)"
 msgstr ""
 
-#: index.php:196
+#: index.php:185
 msgid "Changes "
 msgstr ""
 
-#: index.php:197
+#: index.php:186
 msgid "Submit changes"
 msgstr ""
 
-#: index.php:198
+#: index.php:187
 msgid "Download OSM file"
 msgstr ""
 

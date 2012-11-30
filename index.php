@@ -174,7 +174,7 @@ try{
 										<a href="javascript:displayNameField('old_name','')" id="link_set_old_name"><img src="img/add.png"> <?php echo _("Set old name");?></a>
 										<a href="javascript:displayNameField('alt_name','')" id="link_set_alt_name"><img src="img/add.png"> <?php echo _("Set alternative name");?></a>
 										<a href="javascript:displayNameField('official_name','')" id="link_set_official_name"><img src="img/add.png"> <?php echo _("Set official name");?></a>
-										<a href="javascript:displayNameField('loc_name','')" id="link_set_loc_name"><img src="img/add.png"> <?php echo _("Set old name");?></a>
+										<a href="javascript:displayNameField('loc_name','')" id="link_set_loc_name"><img src="img/add.png"> <?php echo _("Set local name");?></a>
 										</p>
 										<h3><?php echo _("Other tags");?> <a href="#" target="_blank" id="linkOsmObject"><?php echo _("(View OSM Object)");?></a></h3>
 										<table id="table_other_tags">

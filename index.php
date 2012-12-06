@@ -88,7 +88,8 @@ try{
 			<form name="preferencesForm">
 				<h3><?php echo _("Map");?></h3>
 				<p><?php echo _("Choose the map layer");?><br>
-					<input type="radio" id="radioPrefMapquest" name="mapLayer"> <label for="radioPrefMapquest">Mapquest</label>
+				    <input type="radio" id="radioPrefOSM" name="mapLayer"> <label for="radioPrefOSM"><?php echo _("Default OpenStreetMap");?></label><br>
+					<input type="radio" id="radioPrefMapquest" name="mapLayer"> <label for="radioPrefMapquest"><?php echo _("Mapquest");?></label>
 					<br><input type="radio" id="radioPrefToolserver" name="mapLayer"> 
 					<label for="radioPrefToolserver"><?php echo _("Toolserver localised maps");?></label>
 					<select id="selectPrefMapLang" disabled="disabled"><?php
@@ -97,6 +98,9 @@ try{
 						echo '<option value="' . $lang . '">' . $lang . (array_key_exists($lang, Conf::$LANGUAGE_CODES) ? (" (" . Conf::$LANGUAGE_CODES[$lang] . ")") : "") . '</option>';
 					}
 					?></select>
+					<br><input type="radio" id="radioPrefMLM" name="mapLayer" value="_"> <label for="radioPrefMLM"><?php echo _("jochentopf.com multilingual maps");?></label><br>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="textPrefMLM" disabled="disabled"><br>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo _("Specify a list of languages with the separator '|' (ie <i>_|de|ru</i>); '_' is for the <i>name</i> attribute");?>
 				</p>
 				<h3><?php echo _("Preferred language");?></h3>
 				<p><input type="checkbox" id="checkPrefAutoTrans">

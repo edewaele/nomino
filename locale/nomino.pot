@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-30 20:11+0100\n"
+"POT-Creation-Date: 2012-12-07 22:37+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,7 +30,7 @@ msgstr ""
 msgid "Choose a place"
 msgstr ""
 
-#: index.php:87 index.php:116
+#: index.php:87 index.php:120
 msgid "Preferences"
 msgstr ""
 
@@ -42,141 +42,159 @@ msgstr ""
 msgid "Choose the map layer"
 msgstr ""
 
-#: index.php:93
+#: index.php:91
+msgid "Default OpenStreetMap"
+msgstr ""
+
+#: index.php:92
+msgid "Mapquest"
+msgstr ""
+
+#: index.php:94
 msgid "Toolserver localised maps"
 msgstr ""
 
 #: index.php:101
-msgid "Preferred language"
+msgid "jochentopf.com multilingual maps"
 msgstr ""
 
 #: index.php:103
+msgid ""
+"Specify a list of languages with the separator '|' (ie <i>_|de|ru</i>); '_' "
+"is for the <i>name</i> attribute"
+msgstr ""
+
+#: index.php:105
+msgid "Preferred language"
+msgstr ""
+
+#: index.php:107
 msgid ""
 "When editing a place, add automically a field for translating into this "
 "language"
 msgstr ""
 
-#: index.php:111
+#: index.php:115
 msgid "Login with OSM"
 msgstr ""
 
-#: index.php:121
+#: index.php:125
 msgid "(verb, latin)"
 msgstr ""
 
-#: index.php:121
+#: index.php:125
 msgid "I name"
 msgstr ""
 
-#: index.php:124
+#: index.php:128
 msgid "Find Places"
 msgstr ""
 
-#: index.php:125
+#: index.php:129
 msgid "Translate"
 msgstr ""
 
-#: index.php:126
+#: index.php:130
 msgid "View changes"
 msgstr ""
 
-#: index.php:127
+#: index.php:131
 msgid "Documentation"
 msgstr ""
 
-#: index.php:131
+#: index.php:135
 msgid "Find by name"
 msgstr ""
 
-#: index.php:132
+#: index.php:136
 msgid "OSM Object"
 msgstr ""
 
-#: index.php:137 index.php:151
+#: index.php:141 index.php:155
 msgid "Search"
 msgstr ""
 
-#: index.php:141
+#: index.php:145
 msgid "Right-click the map to select places"
 msgstr ""
 
-#: index.php:146
+#: index.php:150
 msgid "Node"
 msgstr ""
 
-#: index.php:147
+#: index.php:151
 msgid "Way"
 msgstr ""
 
-#: index.php:148
+#: index.php:152
 msgid "Relation"
 msgstr ""
 
-#: index.php:157
+#: index.php:161
 msgid "Names"
 msgstr ""
 
-#: index.php:157 jsstrings.php:18
+#: index.php:161 jsstrings.php:18
 msgid "Save"
 msgstr ""
 
-#: index.php:160
+#: index.php:164
 msgid "Name"
 msgstr ""
 
-#: index.php:164
+#: index.php:168
 msgid "Old name"
 msgstr ""
 
-#: index.php:169
+#: index.php:173
 msgid "Alternative name"
 msgstr ""
 
-#: index.php:174
+#: index.php:178
 msgid "Official name"
 msgstr ""
 
-#: index.php:179
+#: index.php:183
 msgid "Local name"
 msgstr ""
 
-#: index.php:184
+#: index.php:188
 msgid "Add translation"
 msgstr ""
 
-#: index.php:185
+#: index.php:189
 msgid "Set old name"
 msgstr ""
 
-#: index.php:186
+#: index.php:190
 msgid "Set alternative name"
 msgstr ""
 
-#: index.php:187
+#: index.php:191
 msgid "Set official name"
 msgstr ""
 
-#: index.php:188
+#: index.php:192
 msgid "Set local name"
 msgstr ""
 
-#: index.php:190
+#: index.php:194
 msgid "Other tags"
 msgstr ""
 
-#: index.php:190
+#: index.php:194
 msgid "(View OSM Object)"
 msgstr ""
 
-#: index.php:196
+#: index.php:200
 msgid "Changes "
 msgstr ""
 
-#: index.php:197
+#: index.php:201
 msgid "Submit changes"
 msgstr ""
 
-#: index.php:198
+#: index.php:202
 msgid "Download OSM file"
 msgstr ""
 
@@ -234,4 +252,12 @@ msgstr ""
 
 #: jsstrings.php:22
 msgid "http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes"
+msgstr ""
+
+#: jsstrings.php:23
+msgid "Relation object"
+msgstr ""
+
+#: jsstrings.php:24
+msgid "Node object"
 msgstr ""

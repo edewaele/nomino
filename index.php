@@ -99,8 +99,8 @@ try{
 					}
 					?></select>
 					<br><input type="radio" id="radioPrefMLM" name="mapLayer" value="_"> <label for="radioPrefMLM"><?php echo _("jochentopf.com multilingual maps");?></label><br>
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" id="textPrefMLM" disabled="disabled"><br>
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?php echo _("Specify a list of languages with the separator '|' (ie <i>_|de|ru</i>); '_' is for the <i>name</i> attribute");?>
+					<blockquote><input type="text" id="textPrefMLM" disabled="disabled"><br>
+					<br><?php echo _("Specify a list of languages with the separator '|' (ie <i>_|de|ru</i>); '_' is for the <i>name</i> attribute");?></blockquote>
 				</p>
 				<h3><?php echo _("Preferred language");?></h3>
 				<p><input type="checkbox" id="checkPrefAutoTrans">

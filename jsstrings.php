@@ -20,4 +20,6 @@ LANG.SAVED = "<?php echo _("Changes saved");?>";
 LANG.TIP1 = "<?php echo _("type a");?>";
 LANG.TIP2 = "<?php echo _("language code (ie. en, fr, de)");?>";
 LANG.TIP_WP_ISO639 = "<?php echo _("http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes");?>";
+LANG.RELATION_OBJ = "<?php echo _("Relation object");?>";
+LANG.NODE_OBJ = "<?php echo _("Node object");?>";
 </script>

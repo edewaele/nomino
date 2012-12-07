@@ -29,6 +29,41 @@ switch ($action)
 			}
 		}
 		break;
+	
+	/**
+	 * Given a boundary relation, the "admin center" node is determined.
+	 * The node id is returned, or -1 if the object is invalid 
+	 */
+	case 'adminCentre':
+		if(isset($_GET['id']))
+		{
+			try
+			{
+				$relation = $osmApi->getObject('relation', $_GET['id']);
+				$members = $relation->findMembersByRole("admin_centre");
+				if(count($members) == 1)
+				{	// maybe the relation has an "admin_centre" node
+					echo $members[0]->getRef();
+				}
+				else
+				{	// otherwise, a "label" node may be considered
+					$members = $relation->findMembersByRole("label");
+					if(count($members) == 1)
+					{
+						echo $members[0]->getRef();
+					}
+					else 
+					{
+						echo -1;
+					}
+				}
+			}
+			catch (Exception $e)
+			{
+				echo "Excep: ".$e->getMessage();
+			}
+		}
+		break;
 
 	/**
 	 * action "set"

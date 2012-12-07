@@ -331,7 +331,7 @@ function savePreferences()
 	updateMapDisplay();
 	
 	// save preferences in the OSM server
-	var keys = {'map':1,'prefLang':1,'toolserverLang':1};
+	var keys = {'map':1,'prefLang':1,'toolserverLang':1,'langMLM':1};
 	for(var key in keys)
 	{
 		$.ajax({

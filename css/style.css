@@ -34,7 +34,9 @@ body{
 #list_find_places
 {
 	width:300px;
-	float: right
+	float: right;
+	height:500px;
+	overflow:auto;
 }
 
 #list_find_places ul

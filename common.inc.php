@@ -25,6 +25,16 @@ function currentPageURL() {
 	return $u;
 }
 
+function currentPageURLwithoutQuery()
+{
+	$u = currentPageURL();
+	if( $p = strpos($u, '?') !== false )
+	{
+		$u = substr($u, 0, $p);
+	}
+	return $u ;
+}
+
 /**
  * Language support manager
  */

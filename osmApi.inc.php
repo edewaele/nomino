@@ -44,7 +44,7 @@ function getOsmApi() {
 		$oauth = new OSM_Auth_OAuth(
 				Conf::OAUTH_CONSUMER_KEY,
 				Conf::OAUTH_CONSUMER_SECRET,
-				array('callback_url' => currentPageURL())
+				array('callback_url' => currentPageURLwithoutQuery())
 		);
 		$osmApi->setCredentials($oauth);
 	}

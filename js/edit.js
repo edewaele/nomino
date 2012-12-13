@@ -36,7 +36,10 @@ function setChangeEvents()
  */
 function saveObject()
 {
-//	$( "#waitDialog" ).dialog('open');
+	if(typingLanguage)
+	{	// prevent from switching to "Changeset" tab if the user is typing a language code
+		return;
+	}
 	var reqParams = objectNames;
 	reqParams.action = 'set';
 	reqParams.id = editedObject.id;

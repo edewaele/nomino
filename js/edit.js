@@ -180,9 +180,13 @@ function removeRow(num)
  * Called after a language code is chosen, the input text and delete buttons are displayed
  * @param event
  */
-function selectLang(event)
+function selectLang(event,ui)
 {
-	if($("#edit_lang").val().length == 2)
+	if(typeof(ui) != 'undefined')
+	{	// If the function was called by the autocoplete event, the value is set
+		$("#edit_lang").val(ui.item.value);
+	}
+	if($("#edit_lang").val().length >= 2)
 	{
 		if(!("name:"+$("#edit_lang").val() in objectNames))
 		{
@@ -214,13 +218,13 @@ function addLine()
 {
 	if(!typingLanguage)
 	{
-		$("#table_names").append("<tr class=\"alternative\" id=\"alternative-"+numAltName+"\"><td><input type=\"text\" id=\"edit_lang\" size=\"2\" maxlength=\"2\"></td>"+
+		$("#table_names").append("<tr class=\"alternative\" id=\"alternative-"+numAltName+"\"><td><input type=\"text\" id=\"edit_lang\" size=\"10\" maxlength=\"10\"></td>"+
 				"<td>" +
 					"<span id=\"type-lang-tip\" class=\"placeDetails\">"+LANG.TIP1+" <a href=\""+LANG.TIP_WP_ISO639+"\" target=\"blank\">"+LANG.TIP2+"</a></span>"+
 					"<input type=\"text\" id=\"name-edit-"+numAltName+"\" class=\"name_edit\" style=\"display:none\">" +
 				"</td>"+
 				"<td style=\"display:none\"><a href=\"javascript:removeRow("+numAltName+")\"><img src=\"img/delete.png\"></td></tr>");
-		$("#edit_lang").autocomplete({source:ISO639,close:selectLang});
+		$("#edit_lang").autocomplete({source:ISO639,select:selectLang});
 		$("#edit_lang").blur(selectLang);
 		$("#edit_lang").focus();
 		numAltName++;

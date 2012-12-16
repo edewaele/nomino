@@ -207,7 +207,7 @@ $(function() {
     
 
 	$( "#preferencesDialog" ).dialog({
-		width:500,
+		width:650,
 		modal: true,
 		resizable:false,
 		autoOpen:false,
@@ -298,6 +298,14 @@ function showPreferences()
 		$("#checkPrefAutoTrans").removeAttr("checked");
 		$("#textPrefLanguage").attr("disabled","disabled");
 	}
+	if($.cookie("prefSuggestions"))
+	{
+		$("#checkPrefSuggestions").attr("checked","checked");
+	}
+	else
+	{
+		$("#checkPrefSuggestions").removeAttr("checked");
+	}
 	$( "#preferencesDialog" ).dialog("open");
 }
 
@@ -326,12 +334,16 @@ function savePreferences()
 		$.cookie("prefLang",$("#textPrefLanguage").val());
 	else
 		$.cookie("prefLang","");
+	if($("#checkPrefSuggestions").attr("checked") == "checked")
+		$.cookie("prefLang",1);
+	else
+		$.cookie("prefSuggestions",0);
 	$.cookie("langMLM",$("#textPrefMLM").val());
 	
 	updateMapDisplay();
 	
 	// save preferences in the OSM server
-	var keys = {'map':1,'prefLang':1,'toolserverLang':1,'langMLM':1};
+	var keys = {'map':1,'prefLang':1,'toolserverLang':1,'langMLM':1,'prefSuggestions':1};
 	for(var key in keys)
 	{
 		$.ajax({

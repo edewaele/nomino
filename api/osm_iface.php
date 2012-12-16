@@ -235,6 +235,18 @@ switch ($action)
 		startOsmAuth();
 
 		break;
+		
+	/**
+	 * action "proposalRequuest"
+	 */
+	case 'proposalRequest':
+		if(isset($_GET["type"]) && isset($_GET["id"]))
+		{
+			if($_GET["type"] == "relation")
+				$_GET["id"] = "-".$_GET["id"];
+			echo file_get_contents("http://toolserver.org/~kentaur/osm_wp/api.php?format=json&osm_type=".$_GET["type"]."&osm_id=".$_GET["id"]);
+		}
+		break;
 
 	/**
 	 * default: Invalid request

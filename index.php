@@ -87,7 +87,7 @@ try{
 		<div id="preferencesDialog" style="display:none" title="<?php echo _("Preferences");?>">
 			<form name="preferencesForm">
 				<h3><?php echo _("Map");?></h3>
-				<p><?php echo _("Choose the map layer");?><br>
+				<p>
 				    <input type="radio" id="radioPrefOSM" name="mapLayer"> <label for="radioPrefOSM"><?php echo _("Default OpenStreetMap");?></label><br>
 					<input type="radio" id="radioPrefMapquest" name="mapLayer"> <label for="radioPrefMapquest"><?php echo _("Mapquest");?></label>
 					<br><input type="radio" id="radioPrefToolserver" name="mapLayer"> 
@@ -98,14 +98,17 @@ try{
 						echo '<option value="' . $lang . '">' . $lang . (array_key_exists($lang, Conf::$LANGUAGE_CODES) ? (" (" . Conf::$LANGUAGE_CODES[$lang] . ")") : "") . '</option>';
 					}
 					?></select>
-					<br><input type="radio" id="radioPrefMLM" name="mapLayer" value="_"> <label for="radioPrefMLM"><?php echo _("jochentopf.com multilingual maps");?></label><br>
-					<blockquote><input type="text" id="textPrefMLM" disabled="disabled"><br>
-					<br><?php echo _("Specify a list of languages with the separator '|' (ie <i>_|de|ru</i>); '_' is for the <i>name</i> attribute");?></blockquote>
+					<br><input type="radio" id="radioPrefMLM" name="mapLayer" value="_"> <label for="radioPrefMLM"><?php echo _("jochentopf.com multilingual maps");?></label>
+					<input type="text" id="textPrefMLM" disabled="disabled">
+					<blockquote><?php echo _("Specify a list of languages with the separator '|' (ie <i>_|de|ru</i>); '_' is for the <i>name</i> attribute");?></blockquote>
 				</p>
 				<h3><?php echo _("Preferred language");?></h3>
 				<p><input type="checkbox" id="checkPrefAutoTrans">
 					<label for="checkPrefAutoTrans"><?php echo _("When editing a place, add automically a field for translating into this language");?></label>
 					<input type="text" id="textPrefLanguage" size="3" maxlength="3" disabled="disabled"></p>
+				<h3><?php echo _("Suggestion");?></h3>
+				<p><input type="checkbox" id="checkPrefSuggestions">
+				<label for="checkPrefSuggestions"><?php echo _("Get translation suggestions when an object is opened");?></label></p>
 			</form>
 		</div>
 		<div id="tabNavButtons" style="display:none" title="TabNavButtons">
@@ -191,6 +194,7 @@ try{
 										<a href="javascript:displayNameField('official_name','')" id="link_set_official_name"><img src="img/add.png"> <?php echo _("Set official name");?></a>
 										<a href="javascript:displayNameField('loc_name','')" id="link_set_loc_name"><img src="img/add.png"> <?php echo _("Set local name");?></a>
 										</p>
+										<p id="proposals" style="display:none"></p>
 										<h3><?php echo _("Other tags");?> <a href="#" target="_blank" id="linkOsmObject"><?php echo _("(View OSM Object)");?></a></h3>
 										<table id="table_other_tags">
 										</table>

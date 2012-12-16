@@ -4,6 +4,7 @@ var rowLanguages = {};// array of tags keys in the form
 var numAltName = 0;
 var typingLanguage = false;
 var editedObject = {};// information abot the currenlty edited object
+var proposals = {};// liste of downloaded proposals, type + id => proposals array
 
 $(function(){	
 	$("#button_save_edit").click(saveObject);
@@ -163,6 +164,8 @@ function beginEdit(type,id)
 			$("#tabs").tabs("enable",1);
 			$("#tabs").tabs("select",1);
 			$( "#waitDialog" ).dialog('close');
+			
+			getProposals(type,id);
 		},
 		error: function(e){$( "#waitDialog" ).dialog('close');alert(LANG.ERROR_RETRIEVE);}
     });
@@ -263,4 +266,78 @@ function hideNameField(key)
 	$("#row_edit_"+key).hide();
 	$("#link_set_"+key).show();
 	setChangeEvents();
+}
+
+/**
+ * Retrieve the translation proposals for an object
+ * @param type OSM object type
+ * @param id OSM object id
+ */
+function getProposals(type,id)
+{
+	if(type+id in proposals)
+	{
+		$("#proposals").empty();
+		for(var key in proposals[type+id])
+		{
+			if($("#proposals").html() == "")
+				$("#proposals").append("<b>"+LANG.PROPOSALS+"</b> : ");
+			$("#proposals").append('<a href="javascript:insertProposal(\''+type+'\','+id+',\''+key	+'\')">('+key+') '+proposals[type+id][key]+'</a> ');
+		}
+		$("#proposals").show();
+	}
+	else
+	{
+		$("#proposals").hide();
+		$.ajax({
+			dataType:'json',
+			url: "api/osm_iface.php",
+			data:{
+				'action':'proposalRequest',
+				'type':type,
+				'id':id	
+			},
+			success: function(e){
+				proposals[type+id] = e;
+				getProposals(type,id);
+			},
+			error:function(e,ts,et){
+				alert(arguments.toSource());
+			}
+		});		
+	}
+}
+
+/**
+ * After the user clicks a translation proposals, a row is inserted or updated with the translation
+ * @param type OSM object type
+ * @param id OSM object id
+ * @param lang the language
+ */
+function insertProposal(type,id,lang)
+{
+	var key = "name:"+lang;
+	var label = lang;
+	if(lang in LANGUAGE_CODES)
+		label += ' <span class="placeDetails">('+LANGUAGE_CODES[lang]+')</span>';
+	if(!(key in objectNames))
+	{
+		objectNames[key] = proposals[type+id][lang];
+		rowLanguages[numAltName] = key;
+		$("#table_names").append("<tr class=\"alternative\" id=\"alternative-"+numAltName+"\"><td>"+label+"</td>" +
+				"<td><input name=\""+key+"\" type=\"text\" value=\""+objectNames[key]+"\" id=\"name-edit-"+numAltName+"\" class=\"name_edit\"></td>" +
+				"<td><a href=\"javascript:removeRow("+numAltName+")\"><img src=\"img/delete.png\"></a></td></tr>");
+		numAltName++;	
+	}
+	else
+	{
+		objectNames[key] = proposals[type+id][lang];
+		var numRow = 0;
+		for(var numIt in rowLanguages)
+		{
+			if(rowLanguages[numIt] == key)
+				numRow = numIt;
+		}	
+		$("#name-edit-"+numRow).val(objectNames[key]);
+	}
 }

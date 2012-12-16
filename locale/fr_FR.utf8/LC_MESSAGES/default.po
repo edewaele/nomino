@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-12-07 22:37+0100\n"
-"PO-Revision-Date: 2012-12-07 22:42+0100\n"
+"POT-Creation-Date: 2012-12-16 23:08+0100\n"
+"PO-Revision-Date: 2012-12-16 23:09+0100\n"
 "Last-Translator: Emmanuel Dewaele <emmanuel.dewaele@gmail.com>\n"
 "Language-Team: \n"
 "Language: \n"
@@ -33,17 +33,13 @@ msgid "Choose a place"
 msgstr "Choisir un lieu"
 
 #: index.php:87
-#: index.php:120
+#: index.php:123
 msgid "Preferences"
 msgstr "Préférences"
 
 #: index.php:89
 msgid "Map"
 msgstr "Fond de carte"
-
-#: index.php:90
-msgid "Choose the map layer"
-msgstr "Choisir la couche"
 
 #: index.php:91
 msgid "Default OpenStreetMap"
@@ -73,129 +69,138 @@ msgstr "Langue préférée"
 msgid "When editing a place, add automically a field for translating into this language"
 msgstr "Lors de l'édition d'un lieu, ajouter automatiquement un champ pour traduire dans cette langue"
 
-#: index.php:115
+#: index.php:109
+#: jsstrings.php:25
+msgid "Proposals"
+msgstr "Propositions"
+
+#: index.php:111
+msgid "Get translation suggestions when an object is opened"
+msgstr "Récupérer les propositions de traduction à l'ouverture d'un objet"
+
+#: index.php:118
 msgid "Login with OSM"
 msgstr "Se connecter sur OSM"
 
-#: index.php:125
+#: index.php:128
 msgid "(verb, latin)"
 msgstr "(verbe, latin)"
 
-#: index.php:125
+#: index.php:128
 msgid "I name"
 msgstr "Je nomme"
 
-#: index.php:128
+#: index.php:131
 msgid "Find Places"
 msgstr "Trouver un lieu"
 
-#: index.php:129
+#: index.php:132
 msgid "Translate"
 msgstr "Traduire"
 
-#: index.php:130
+#: index.php:133
 msgid "View changes"
 msgstr "Voir les modifications"
 
-#: index.php:131
+#: index.php:134
 msgid "Documentation"
 msgstr "Documentation"
 
-#: index.php:135
+#: index.php:138
 msgid "Find by name"
 msgstr "Trouver par nom"
 
-#: index.php:136
+#: index.php:139
 msgid "OSM Object"
 msgstr "Objet OSM"
 
-#: index.php:141
-#: index.php:155
+#: index.php:144
+#: index.php:158
 msgid "Search"
 msgstr "Chercher"
 
-#: index.php:145
+#: index.php:148
 msgid "Right-click the map to select places"
 msgstr "Clic-droit sur la carte pour selectionner un lieu"
 
-#: index.php:150
+#: index.php:153
 msgid "Node"
 msgstr "Nœud"
 
-#: index.php:151
+#: index.php:154
 msgid "Way"
 msgstr "Ligne"
 
-#: index.php:152
+#: index.php:155
 msgid "Relation"
 msgstr "Relation"
 
-#: index.php:161
+#: index.php:164
 msgid "Names"
 msgstr "Noms"
 
-#: index.php:161
+#: index.php:164
 #: jsstrings.php:18
 msgid "Save"
 msgstr "Enregistrer"
 
-#: index.php:164
+#: index.php:167
 msgid "Name"
 msgstr "Nom"
 
-#: index.php:168
+#: index.php:171
 msgid "Old name"
 msgstr "Ancien nom"
 
-#: index.php:173
+#: index.php:176
 msgid "Alternative name"
 msgstr "Nom alternatif"
 
-#: index.php:178
+#: index.php:181
 msgid "Official name"
 msgstr "Nom officiel"
 
-#: index.php:183
+#: index.php:186
 msgid "Local name"
 msgstr "Nom local"
 
-#: index.php:188
+#: index.php:191
 msgid "Add translation"
 msgstr "Ajouter une traduction"
 
-#: index.php:189
+#: index.php:192
 msgid "Set old name"
 msgstr "Définir l'ancien nom"
 
-#: index.php:190
+#: index.php:193
 msgid "Set alternative name"
 msgstr "Définir un nom alternatif"
 
-#: index.php:191
+#: index.php:194
 msgid "Set official name"
 msgstr "Définir le nom officiel"
 
-#: index.php:192
+#: index.php:195
 msgid "Set local name"
 msgstr "Définir le nom local"
 
-#: index.php:194
+#: index.php:198
 msgid "Other tags"
 msgstr "Autres attributs"
 
-#: index.php:194
+#: index.php:198
 msgid "(View OSM Object)"
 msgstr "(Voir l'objet OSM)"
 
-#: index.php:200
+#: index.php:204
 msgid "Changes "
 msgstr "Modifications"
 
-#: index.php:201
+#: index.php:205
 msgid "Submit changes"
 msgstr "Publier les modifications"
 
-#: index.php:202
+#: index.php:206
 msgid "Download OSM file"
 msgstr "Télécharger le fichier OSM"
 
@@ -263,3 +268,5 @@ msgstr "Ouvrir la relation"
 msgid "Node object"
 msgstr "Ouvrir le nœud"
 
+#~ msgid "Choose the map layer"
+#~ msgstr "Choisir la couche"

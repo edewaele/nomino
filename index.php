@@ -106,7 +106,7 @@ try{
 				<p><input type="checkbox" id="checkPrefAutoTrans">
 					<label for="checkPrefAutoTrans"><?php echo _("When editing a place, add automically a field for translating into this language");?></label>
 					<input type="text" id="textPrefLanguage" size="3" maxlength="3" disabled="disabled"></p>
-				<h3><?php echo _("Suggestion");?></h3>
+				<h3><?php echo _("Proposals");?></h3>
 				<p><input type="checkbox" id="checkPrefSuggestions">
 				<label for="checkPrefSuggestions"><?php echo _("Get translation suggestions when an object is opened");?></label></p>
 			</form>

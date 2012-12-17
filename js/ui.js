@@ -335,7 +335,7 @@ function savePreferences()
 	else
 		$.cookie("prefLang","");
 	if($("#checkPrefSuggestions").attr("checked") == "checked")
-		$.cookie("prefLang",1);
+		$.cookie("prefSuggestions",1);
 	else
 		$.cookie("prefSuggestions",0);
 	$.cookie("langMLM",$("#textPrefMLM").val());

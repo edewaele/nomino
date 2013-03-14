@@ -85,7 +85,7 @@ switch ($action)
 				// Iterate all existing name:** tags in the object 
 				foreach (array_keys($elt->findTags()) as $existingTag)
 				{
-					if (strlen($existingTag) == 7 && substr($existingTag, 0, 5) == 'name:' || array_key_exists($existingTag, Conf::$NAME_FIELDS))
+					if (strlen($existingTag) >= 7 && substr($existingTag, 0, 5) == 'name:' || array_key_exists($existingTag, Conf::$NAME_FIELDS))
 					{
 						// If this tag is not in the request, it was removed by the user
 						if (!array_key_exists($existingTag, $_GET))

@@ -30,7 +30,7 @@ try{
 		<script src="lib/jQuery/js/jquery-ui-1.8.18.custom.min.js"></script>
 		<script src="lib/jQuery/js/jquery.cookie.js"></script>
 		<script src="lib/OpenLayers/OpenLayers.js"></script>
-		<link href='http://fonts.googleapis.com/css?family=Metamorphous' rel='stylesheet' type='text/css'>
+		<link href='http://fonts.googleapis.com/css?family=Fondamento' rel='stylesheet' type='text/css'>
 		<link href='css/style.css' rel='stylesheet' type='text/css'>
 
 		<script src="js/ui.js"></script>
@@ -75,7 +75,7 @@ try{
 <?php } ?>
 		<?php require("jsstrings.php");?>
 	</head>
-	<body>
+	<body onresize="resizeApp()">
 
 		<!-- Dialogs -->
 		<div id="waitDialog" style="display: none"><div id="progressbar"></div></div>
@@ -125,7 +125,6 @@ try{
 		</div>
 
 		<div id="mainContainer">
-			<div id="appTitle">OpenStreetMap Nomino<span id="subtitle1"><?php echo _("(verb, latin)");?></span> <span id="subtitle2"><?php echo _("I name");?></span></div>
 			<div id="tabs">
 				<ul>
 					<li><a href="#tabs-1"><?php echo _("Find Places");?></a></li>
@@ -134,6 +133,7 @@ try{
 					<li><a href="#tabs-4"><?php echo _("Documentation");?></a></li>
 				</ul>
 				<div id="tabs-1"><!-- Find places -->
+					<div id="appTitle">OpenStreetMap Nomino<span id="subtitle1"><?php echo _("(verb, latin)");?></span> <span id="subtitle2"><?php echo _("I name");?></span></div>
 					<div id="radio_find_mode">
 						<input type="radio" id="radio_find_mode1" name="radio" checked="checked" /><label for="radio_find_mode1"><?php echo _("Find by name");?></label>
 						<input type="radio" id="radio_find_mode2" name="radio"/><label for="radio_find_mode2"><?php echo _("OSM Object");?></label>

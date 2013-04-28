@@ -2,6 +2,8 @@
 
 body{
 	font-size:12px;
+	padding:0px;
+	margin:0px
 }
 
 #mainContainer{
@@ -9,8 +11,8 @@ body{
 }
 
 #appTitle{
-	font-family:'Metamorphous', cursive;
-	font-size:25px
+	font-family:'Fondamento', cursive;
+	font-size:27px
 }
 
 #appTitle #subtitle1{
@@ -20,10 +22,6 @@ body{
 }
 #appTitle #subtitle2{
 	font-size:12px;
-}
-
-#mainContainer{
-	width:800px
 }
 
 #map_find_places{
@@ -55,6 +53,12 @@ body{
 
 #tabs{
 	min-height: 600px;
+	min-width:800px;
+	height:100%;
+	width:100%;
+	margin: 0px;
+	border-style:none;
+	padding:0px
 }
 
 .place_highlight

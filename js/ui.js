@@ -254,6 +254,8 @@ $(function() {
 //    		function(){$(this).addClass("place_highlight");},
 //    		function(){$(this).removeClass("place_highlight");}
 //    );
+	
+	resizeApp();
 
 });
 
@@ -424,4 +426,16 @@ function osmAuth()
 		]
 	});
 
+}
+
+/**
+ * Set the map dimensions according to the window size  
+*/
+function resizeApp()
+{
+	var height = Math.max($(window).height()*1,600);
+	$("#map_find_places").height(height-160);
+	var width = Math.max($(window).width()*1,800);
+	$("#map_find_places").width(width-400);
+	map_find_places.updateSize();
 }

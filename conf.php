@@ -64,5 +64,5 @@ class Conf
 	 * List of PHP translations
 	 * @var array of string
 	 */
-	public static $UI_LANGUAGUES = array('fr'=>'fr_FR.utf8');
+	public static $UI_LANGUAGUES = array('fr'=>'fr_FR.utf8', 'ca'=>'ca');
 }

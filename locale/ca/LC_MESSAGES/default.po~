@@ -1,0 +1,269 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2013 Joan Montané
+# This file is distributed under the same license as the Nomino.
+# Joan Montané <jmontane@softcatala.org>, 2013.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-12-07 22:37+0100\n"
+"PO-Revision-Date: 2013-05-29 13:38+0200\n"
+"Last-Translator: Joan Montan <jmontane@softcatala.org>\n"
+"Language-Team: ca <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Gtranslator 2.91.5\n"
+
+#: index.php:83
+msgid ""
+"To save changes in OSM database you have to be authenticated at osm.org."
+msgstr ""
+"Per desar els canvis a la base de dades OSM heu d'estar autenticats a osm."
+"org."
+
+#: index.php:84
+msgid "After authentification you'll be redirected back here."
+msgstr "Desprs d'autenticar-vos sereu redirigit cap aqu."
+
+#: index.php:86
+msgid "Choose a place"
+msgstr "Seleccioneu un lloc"
+
+#: index.php:87 index.php:120
+msgid "Preferences"
+msgstr "Preferncies"
+
+#: index.php:89
+msgid "Map"
+msgstr "Mapa"
+
+#: index.php:90
+msgid "Choose the map layer"
+msgstr "Trieu la capa del mapa"
+
+#: index.php:91
+msgid "Default OpenStreetMap"
+msgstr "OpenStreetMap predeterminat"
+
+#: index.php:92
+msgid "Mapquest"
+msgstr "Mapquest"
+
+#: index.php:94
+msgid "Toolserver localised maps"
+msgstr "Mapes traduts del Toolserver"
+
+#: index.php:101
+msgid "jochentopf.com multilingual maps"
+msgstr "Mapes multillengua jochentopf.com"
+
+#: index.php:103
+msgid ""
+"Specify a list of languages with the separator '|' (ie <i>_|de|ru</i>); '_' "
+"is for the <i>name</i> attribute"
+msgstr ""
+"Especifiqueu una llista de llengues amb el separador '|' (p.e. <i>_|de|ru</"
+"i>); '_' s per a l'atribut <i>name</i>"
+
+#: index.php:105
+msgid "Preferred language"
+msgstr "Llengua preferida"
+
+#: index.php:107
+msgid ""
+"When editing a place, add automically a field for translating into this "
+"language"
+msgstr ""
+"En editar un lloc, afegeix automticament un camp per traduir a aquesta "
+"llengua"
+
+#: index.php:115
+msgid "Login with OSM"
+msgstr "Inicia sessi amb l'OSM"
+
+#: index.php:125
+msgid "(verb, latin)"
+msgstr "(verb, llat)"
+
+#: index.php:125
+msgid "I name"
+msgstr "Jo anomeno"
+
+#: index.php:128
+msgid "Find Places"
+msgstr "Cerca llocs"
+
+#: index.php:129
+msgid "Translate"
+msgstr "Traducci"
+
+#: index.php:130
+msgid "View changes"
+msgstr "Mostra els canvis"
+
+#: index.php:131
+msgid "Documentation"
+msgstr "Documentaci"
+
+#: index.php:135
+msgid "Find by name"
+msgstr "Cerca per nom"
+
+#: index.php:136
+msgid "OSM Object"
+msgstr "Objecte de l'OSM"
+
+#: index.php:141 index.php:155
+msgid "Search"
+msgstr "Cerca"
+
+#: index.php:145
+msgid "Right-click the map to select places"
+msgstr "Feu clic dret al mapa per seleccionar llocs"
+
+#: index.php:150
+msgid "Node"
+msgstr "Node"
+
+#: index.php:151
+msgid "Way"
+msgstr "Via"
+
+#: index.php:152
+msgid "Relation"
+msgstr "Relaci"
+
+#: index.php:161
+msgid "Names"
+msgstr "Noms"
+
+#: index.php:161 jsstrings.php:18
+msgid "Save"
+msgstr "Desa"
+
+#: index.php:164
+msgid "Name"
+msgstr "Nom"
+
+#: index.php:168
+msgid "Old name"
+msgstr "Nom antic"
+
+#: index.php:173
+msgid "Alternative name"
+msgstr "Nom alternatiu"
+
+#: index.php:178
+msgid "Official name"
+msgstr "Nom oficial"
+
+#: index.php:183
+msgid "Local name"
+msgstr "Nom local"
+
+#: index.php:188
+msgid "Add translation"
+msgstr "Afegeix una traducci"
+
+#: index.php:189
+msgid "Set old name"
+msgstr "Afegeix el nom antic"
+
+#: index.php:190
+msgid "Set alternative name"
+msgstr "Afegeix el nom alternatiu"
+
+#: index.php:191
+msgid "Set official name"
+msgstr "Afegeix el nom oficial"
+
+#: index.php:192
+msgid "Set local name"
+msgstr "Afegeix el nom local"
+
+#: index.php:194
+msgid "Other tags"
+msgstr "Altres etiquetes"
+
+#: index.php:194
+msgid "(View OSM Object)"
+msgstr "(Mostra l'objecte de l'OSM)"
+
+#: index.php:200
+msgid "Changes "
+msgstr "Canvis"
+
+#: index.php:201
+msgid "Submit changes"
+msgstr "Envia els canvis"
+
+#: index.php:202
+msgid "Download OSM file"
+msgstr "Baixa el fitxer OSM"
+
+#: jsstrings.php:8
+msgid "Authenticate"
+msgstr "Autentica"
+
+#: jsstrings.php:9
+msgid "Cancel"
+msgstr "Cancella"
+
+#: jsstrings.php:10
+msgid "Choose"
+msgstr "Seleccioneu"
+
+#: jsstrings.php:11
+msgid "This language is already in use"
+msgstr "Aquesta llengua ja s en s"
+
+#: jsstrings.php:12
+msgid "Error while loading places"
+msgstr "S'ha produt un error en carregar els llocs"
+
+#: jsstrings.php:13
+msgid "Error saving user preferences"
+msgstr "S'ha produt un error en desar les preferncies d'usuari"
+
+#: jsstrings.php:14
+msgid "Error while retrieving OSM object"
+msgstr "S'ha produt un error en recuperar l'objecte de l'OSM"
+
+#: jsstrings.php:15
+msgid "Error while saving object"
+msgstr "S'ha produt un error en desar l'objecte"
+
+#: jsstrings.php:16
+msgid "Error while submitting changes"
+msgstr "S'ha produt un error en trametre els canvis"
+
+#: jsstrings.php:17
+msgid "Revert"
+msgstr "Desfs"
+
+#: jsstrings.php:19
+msgid "Changes saved"
+msgstr "S'han desat els canvis"
+
+#: jsstrings.php:20
+msgid "type a"
+msgstr "indiqueu un"
+
+#: jsstrings.php:21
+msgid "language code (ie. en, fr, de)"
+msgstr "codi de llengua (p.e. ca, en, fr)"
+
+#: jsstrings.php:22
+msgid "http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes"
+msgstr "http://ca.wikipedia.org/wiki/ISO_639-1"
+
+#: jsstrings.php:23
+msgid "Relation object"
+msgstr "Objecte relaci"
+
+#: jsstrings.php:24
+msgid "Node object"
+msgstr "Objecte node"
